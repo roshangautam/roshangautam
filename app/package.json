@@ -35,7 +35,8 @@
   "devDependencies": {
     "babel-eslint": ">=10.0.0",
     "gh-pages": "^3.2.3",
-    "npm-check": "^5.9.2",
+    "node-fetch": ">=2.6.7",
+    "npm-check": "4.1.4",
     "postcss": "8.4.5",
     "prettier": "2.5.1",
     "sanitize-html": "2.6.1",
