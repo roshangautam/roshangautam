@@ -2,7 +2,7 @@
 title: "How to create a personal blog using Azure Static Web App & Gatsby"
 description: "In this article we will explore a set of tools and services which will let you build a personal blog and help setup an automated publishing pipeline."
 coverImage: "/assets/images/posts/covers/personal-websites-101.svg"
-date: "2021-07-10"
+date: "2022-12-21"
 author:
   name: Roshan Gautam
   picture: "https://avatars.githubusercontent.com/u/978347?v=4"

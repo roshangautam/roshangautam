@@ -4,17 +4,13 @@ env:
   skip_deploy_on_missing_secrets: true
   
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [closed]
     branches:
       - main
 
 jobs:
   build_and_deploy_job:  
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     environment:
