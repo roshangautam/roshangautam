@@ -34,7 +34,5 @@ jobs:
           output_location: "public" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
       - name: Copy config
-        uses: canastro/copy-file-action@master
-        with:
-          source: "app/staticwebapp.config.json"
-          target: "public/staticwebapp.config.json"
+        run: |
+            cp "app/staticwebapp.config.json" "app/public/staticwebapp.config.json"
