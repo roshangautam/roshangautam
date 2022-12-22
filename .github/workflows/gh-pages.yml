@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v3
-          with:
+        with:
           node-version: 18      
       - uses: enriikke/gatsby-gh-pages-action@v2
         with:
