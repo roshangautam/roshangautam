@@ -21,4 +21,3 @@ jobs:
           node-version: 18
       - run: npm i -g @azure/static-web-apps-cli
       - run: swa build
-      - run: swa deploy -d ${{ secrets.DEPLOYMENT_TOKEN }}
