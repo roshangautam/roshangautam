@@ -1,4 +1,4 @@
-name: Azure
+name: Deploy to Azure SWA
       
 env:
   skip_deploy_on_missing_secrets: true
