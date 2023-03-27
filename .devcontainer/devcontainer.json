@@ -3,7 +3,7 @@
 {
 	"name": "RoshanGautam.com",
 	"image": "mcr.microsoft.com/devcontainers/javascript-node:0-18-bullseye",
-	
+	"runArgs": ["--platform=linux/amd64"],
 	// Set *default* container specific settings.json values on container create.
 	"settings": {},
 
@@ -17,7 +17,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "npm i -g @azure/static-web-apps-cli gatsby-cli azure-functions-core-tools@4",
+	"postCreateCommand": "npm i -g @azure/static-web-apps-cli gatsby-cli azure-functions-core-tools@4 --unsafe-perm true",
 
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "node"

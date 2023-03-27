@@ -6,8 +6,8 @@
       "apiLocation": "api",
       "outputLocation": "public",
       "appBuildCommand": "npm run build",
-      "run": "npm run start",
-      "appDevserverUrl": "http://localhost:8000"
+      "apiBuildCommand": "npm run build",
+      "run": "npm run start"
     }
   }
 }
