@@ -8,6 +8,6 @@
       "appBuildCommand": "npm run build",
       "apiBuildCommand": "npm run build",
       "run": "npm run start"
-    }
+    }   
   }
 }
