@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[roshangautam]]></title><description><![CDATA[A personal blog by Roshan Gautam. Highly opinionated !!!]]></description><link>https://roshangautam.com</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 25 Dec 2024 22:46:30 GMT</lastBuildDate><item><title><![CDATA[Best practices for general MySql administration]]></title><description><![CDATA[Access and Credential Security Command Line Password Security Avoid using passwords directly in command line: ⚠️ Warning: Using passwords in…]]></description><link>https://roshangautam.com/mysql-best-practices/</link><guid isPermaLink="false">https://roshangautam.com/mysql-best-practices/</guid><pubDate>Wed, 25 Dec 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;Access and Credential Security&lt;/h2&gt;
+&lt;h3&gt;Command Line Password Security&lt;/h3&gt;
+&lt;p&gt;Avoid using passwords directly in command line:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;mysql -u testuser -pMyP@ss0rd  &lt;span class=&quot;token comment&quot;&gt;# Not recommended&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;⚠️ Warning: Using passwords in command line is insecure as they can be viewed in shell history.&lt;/p&gt;
+&lt;p&gt;Better alternatives:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Use &lt;code class=&quot;language-text&quot;&gt;mysql_config_editor&lt;/code&gt; for script automation&lt;/li&gt;
+&lt;li&gt;Use password prompt&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Strong Access Policy Recommendations&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Implement &lt;code class=&quot;language-text&quot;&gt;validate_password&lt;/code&gt; plugin&lt;/li&gt;
+&lt;li&gt;Limit user access by IP/IP range&lt;/li&gt;
+&lt;li&gt;Follow principle of least privilege&lt;/li&gt;
+&lt;li&gt;Create dedicated users for specific operations (e.g., backup user)&lt;/li&gt;
+&lt;li&gt;Restrict FILE and SUPER privileges for remote users&lt;/li&gt;
+&lt;li&gt;Use SSL for public network connections&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Replication Best Practices&lt;/h2&gt;
+&lt;h3&gt;Object Creation&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Always use &lt;code class=&quot;language-text&quot;&gt;IF EXISTS&lt;/code&gt; and &lt;code class=&quot;language-text&quot;&gt;IF NOT EXISTS&lt;/code&gt; clauses&lt;/li&gt;
+&lt;li&gt;Prevents common replication breaks from object conflicts&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;General Guidelines&lt;/h3&gt;
+&lt;p&gt;Most common problem for replication break or errors is that OBJECT already exists on SLAVE. By using IF EXISTS and IF NOT EXISTS while creating database objects we can avoid.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Enable GTID and crash-safe replication&lt;/li&gt;
+&lt;li&gt;Keep slaves in read-only mode&lt;/li&gt;
+&lt;li&gt;Run backups and query optimization on slaves&lt;/li&gt;
+&lt;li&gt;Offload reporting queries to slaves&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Logging&lt;/h2&gt;
+&lt;h3&gt;Available Log Types&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Binary Log&lt;/strong&gt;: Transaction records&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Relay Log&lt;/strong&gt;: Replication-related logs&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;General Log&lt;/strong&gt;: Client command logging&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Slow Query Log&lt;/strong&gt;: Performance monitoring&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Error Log&lt;/strong&gt;: Server messages (NOTES, WARNINGS, ERRORS)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Audit Log&lt;/strong&gt;: User activity tracking&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Basic Administration Commands&lt;/h2&gt;
+&lt;h3&gt;Database and Table Management&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sql&quot;&gt;&lt;pre class=&quot;language-sql&quot;&gt;&lt;code class=&quot;language-sql&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;-- Create database&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;DATABASE&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;EXISTS&lt;/span&gt; test_db&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;-- Create table&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;EXISTS&lt;/span&gt; t1 &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+    id &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;primary&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;auto_increment&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    uname &lt;span class=&quot;token keyword&quot;&gt;varchar&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    comments &lt;span class=&quot;token keyword&quot;&gt;text&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;User Management&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sql&quot;&gt;&lt;pre class=&quot;language-sql&quot;&gt;&lt;code class=&quot;language-sql&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;-- Create users&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;USER&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;local_user1&apos;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;@&apos;localhost&apos;&lt;/span&gt; IDENTIFIED &lt;span class=&quot;token keyword&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;mypass&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;USER&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;remote_user1&apos;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;@&apos;%&apos;&lt;/span&gt; IDENTIFIED &lt;span class=&quot;token keyword&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;mypass&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;-- Modify users&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;RENAME&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;USER&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;abc&apos;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;@&apos;localhost&apos;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;xyz&apos;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;@&apos;%&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;USER&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;remote_user1&apos;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;@&apos;%&apos;&lt;/span&gt; IDENTIFIED &lt;span class=&quot;token keyword&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;mypass&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;USER&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;remote_user1&apos;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;@&apos;%&apos;&lt;/span&gt; PASSWORD EXPIRE&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;USER&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;remote_user1&apos;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;@&apos;%&apos;&lt;/span&gt; ACCOUNT &lt;span class=&quot;token keyword&quot;&gt;LOCK&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Privilege Management&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sql&quot;&gt;&lt;pre class=&quot;language-sql&quot;&gt;&lt;code class=&quot;language-sql&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;-- Grant examples&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;GRANT&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;ALL&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;PRIVILEGES&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;ON&lt;/span&gt; db1&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;remote_user1&apos;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;@&apos;%&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;GRANT&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;SELECT&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;INSERT&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;UPDATE&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;DELETE&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;ON&lt;/span&gt; db1&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;remote_user1&apos;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;@&apos;%&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;GRANT&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;ON&lt;/span&gt; db1&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;table1 &lt;span class=&quot;token keyword&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;remote_user1&apos;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;@&apos;%&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;-- Check privileges&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;SHOW&lt;/span&gt; GRANTS &lt;span class=&quot;token keyword&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;remote_user1&apos;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;@&apos;%&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Monitoring&lt;/h2&gt;
+&lt;h3&gt;Database Size&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sql&quot;&gt;&lt;pre class=&quot;language-sql&quot;&gt;&lt;code class=&quot;language-sql&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;SELECT&lt;/span&gt; 
+    table_schema &lt;span class=&quot;token string&quot;&gt;&quot;Database Name&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;data_length &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; index_length&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1024&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1024&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Database Size in MB&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;data_free&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1024&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1024&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Free Space in MB&quot;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;FROM&lt;/span&gt; information_schema&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;TABLES&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;GROUP&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;BY&lt;/span&gt; table_schema&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Active Sessions&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;SHOW PROCESSLIST&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;InnoDB Engine Status:&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;SHOW STATUS&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+SHOW ENGINE INNODB STATUS&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Performance schema: Live statistics&lt;/h3&gt;
+&lt;p&gt;Example:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Enable Locking related instruments (if it’s not enabled):&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sql&quot;&gt;&lt;pre class=&quot;language-sql&quot;&gt;&lt;code class=&quot;language-sql&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;UPDATE&lt;/span&gt; performance_schema&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;setup_instruments &lt;span class=&quot;token keyword&quot;&gt;SET&lt;/span&gt; ENABLED&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;’YES’&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; TIMED&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;’YES’ &lt;span class=&quot;token keyword&quot;&gt;WHERE&lt;/span&gt; NAME&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;’wait&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;lock&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;metadata&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;sql&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;mdl’&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;FROM&lt;/span&gt; performance_schema&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;metadata_locks &lt;span class=&quot;token keyword&quot;&gt;WHERE&lt;/span&gt; OBJECT_SCHEMA&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;’test’ &lt;span class=&quot;token operator&quot;&gt;AND&lt;/span&gt; OBJECT_NAME &lt;span class=&quot;token operator&quot;&gt;LIKE&lt;/span&gt; ‘t_’&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Check Database objects info:&lt;/h3&gt;
+&lt;h4&gt;Show Databases:&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;SHOW DATABASES&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Select Database:&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;Use db_name&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Tables:&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;SHOW TABLES&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+SELECT TABLE_NAME from information_schema.TABLES where TABLE_SCHEMA &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;test_db&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Routines:&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sql&quot;&gt;&lt;pre class=&quot;language-sql&quot;&gt;&lt;code class=&quot;language-sql&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; ROUTINES &lt;span class=&quot;token keyword&quot;&gt;where&lt;/span&gt; ROUTINE_SCHEMA&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&apos;db_name’&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Index:&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sql&quot;&gt;&lt;pre class=&quot;language-sql&quot;&gt;&lt;code class=&quot;language-sql&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;select&lt;/span&gt; TABLE_NAME&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;INDEX_NAME&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;COLUMN_NAME&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;INDEX_TYPE  &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; information_schema&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;STATISTICS&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;where&lt;/span&gt; TABLE_SCHEMA &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;db_name&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Views:&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sql&quot;&gt;&lt;pre class=&quot;language-sql&quot;&gt;&lt;code class=&quot;language-sql&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; information_schema&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;VIEWS &lt;span class=&quot;token keyword&quot;&gt;where&lt;/span&gt; TABLE_SCHEMA &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;db_name&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Backup and Restore&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;Require privileges&lt;/code&gt;: mysqldump requires at least the &lt;code class=&quot;language-text&quot;&gt;SELECT&lt;/code&gt; privilege for dumped tables, &lt;code class=&quot;language-text&quot;&gt;SHOW VIEW&lt;/code&gt; for dumped views, &lt;code class=&quot;language-text&quot;&gt;TRIGGER&lt;/code&gt; for dumped triggers, and &lt;code class=&quot;language-text&quot;&gt;LOCK TABLES&lt;/code&gt; if the –single-transaction option is not used. Certain options might require other privileges as noted in the option descriptions. &lt;a href=&quot;http://dev.mysql.com/doc/refman/5.7/en/mysqldump.html&quot;&gt;Reference&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;Backup Commands&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Full database backup&lt;/span&gt;
+mysqldump -u root -p --single-transaction --databases db1 --routines &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; db1_fullbkp.sql
+
+&lt;span class=&quot;token comment&quot;&gt;# Compressed full database backup&lt;/span&gt;
+mysqldump -u root -p --single-transaction --databases db1 --routines &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; db1_fullbkp.sql.gz&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Single table backup&lt;/span&gt;
+mysqldump -u  -h  -p --single-transaction db_name table_name --routines &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; db1_full.sql&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Restore Commands&lt;/h3&gt;
+&lt;p&gt;To reload a dump file, you must have the privileges required to execute the statements that it contains, such as the appropriate &lt;code class=&quot;language-text&quot;&gt;CREATE&lt;/code&gt; privileges for objects created by those statements.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;mysql -u username -p db_name &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; db1_fullbkp.sql
+&lt;span class=&quot;token comment&quot;&gt;# OR for compressed files&lt;/span&gt;
+gunzip &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; db1_fullbkp.sql.gz &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; mysql -u username -p db_name&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Replication Setup&lt;/h2&gt;
+&lt;h3&gt;Master Configuration&lt;/h3&gt;
+&lt;p&gt;Create replication user on MASTER with replication privileges.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sql&quot;&gt;&lt;pre class=&quot;language-sql&quot;&gt;&lt;code class=&quot;language-sql&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;USER&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;EXISTS&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;rpluser&apos;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;@&apos;%&apos;&lt;/span&gt; IDENTIFIED &lt;span class=&quot;token keyword&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;rpluser1234&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;GRANT&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;REPLICATION&lt;/span&gt; SLAVE&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;REPLICATION&lt;/span&gt; CLIENT &lt;span class=&quot;token keyword&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;rpluser&apos;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;@&apos;%&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Slave Configuration&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sql&quot;&gt;&lt;pre class=&quot;language-sql&quot;&gt;&lt;code class=&quot;language-sql&quot;&gt;CHANGE MASTER &lt;span class=&quot;token keyword&quot;&gt;TO&lt;/span&gt;
+    MASTER_HOST&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;&amp;lt;MASTER_IP&gt;&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    MASTER_USER&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;rpluser&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    MASTER_PASSWORD&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;rpluser1234&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    MASTER_PORT&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;3306&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    MASTER_AUTO_POSITION&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Start Slave and check its status&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sql&quot;&gt;&lt;pre class=&quot;language-sql&quot;&gt;&lt;code class=&quot;language-sql&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;START&lt;/span&gt; SLAVE&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;SHOW&lt;/span&gt; SLAVE &lt;span class=&quot;token keyword&quot;&gt;STATUS&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; Slave_IO_Running &lt;span class=&quot;token operator&quot;&gt;and&lt;/span&gt; Slave_SQL_Running &lt;span class=&quot;token keyword&quot;&gt;column&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;value&lt;/span&gt; should be ‘YES’&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Service Management (Linux)&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Stop MySQL&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;service&lt;/span&gt; mysqld stop
+
+&lt;span class=&quot;token comment&quot;&gt;# Start MySQL&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;service&lt;/span&gt; mysqld start&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[How to create a personal blog using Azure Static Web App & Gatsby]]></title><description><![CDATA[In the last article we looked at how we can run a personal blog from github pages for free. In this article we will learn you how to deploy…]]></description><link>https://roshangautam.com/how-to-create-blog-azure-static-web-app/</link><guid isPermaLink="false">https://roshangautam.com/how-to-create-blog-azure-static-web-app/</guid><pubDate>Wed, 21 Dec 2022 00:00:00 GMT</pubDate><content:encoded>&lt;p style=&quot;text-align: center;&quot;&gt;
+  &lt;img src=&quot;/5f16c897f756084c73f0df782d8a0baf/personal-websites-101.svg&quot;&gt;
+&lt;/p&gt;
+&lt;p&gt;In the last &lt;a href=&quot;https://roshangautam.com/how-to-create-personal-blog-gatsby-github-pages-github-actions/&quot;&gt;article&lt;/a&gt; we looked at how we can run a personal blog from github pages for free. In this article we will learn you how to deploy the same blog as an &lt;a href=&quot;https://azure.microsoft.com/en-us/services/app-service/static/&quot;&gt;Azure Static Web App&lt;/a&gt; aka SWA. Everything is still the same except this time we will configure a workflow which will publish the blog in Azure instead of Github. SWA is one of Azures free offerings.&lt;/p&gt;
+&lt;h2&gt;Getting Started&lt;/h2&gt;
+&lt;h3&gt;Azure&lt;/h3&gt;
+&lt;p&gt;Let’s start with setting up a personal account in Azure. Navigate to &lt;a href=&quot;https://portal.azure.com/&quot;&gt;Azure Portal&lt;/a&gt; and either signup for a new account or signin to your existing account.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If you don’t have an Azure account, please visit [&lt;a href=&quot;https://portal.azure.com/&quot;&gt;Azure&lt;/a&gt; and signup for a free account. Azure offers quite a few free offerings including Static Web Apps. Please dont be alarmed if you were asked to provide a credit card number. You wouldn’t be charged anything if you stay within the free offerings.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;We will use Gatsby as our blog framework. Please visit my last &lt;a href=&quot;https://roshangautam.com/how-to-create-personal-blog-gatsby-github-pages-github-actions/&quot;&gt;article&lt;/a&gt; to setup the project and get your blog ready.&lt;/p&gt;
+&lt;h3&gt;Install required tools&lt;/h3&gt;
+&lt;p&gt;Install the following in addition to the tools used in the last article. Skip this step if you already have’em&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurestaticwebapps&quot;&gt;VS Code SWA Extension&lt;/a&gt; -&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Project Setup&lt;/h3&gt;
+&lt;p&gt;Let’s create a new Gatsby site using the &lt;a href=&quot;https://www.gatsbyjs.com/starters/gatsbyjs/gatsby-starter-blog/&quot;&gt;blog starter template&lt;/a&gt;. You can use any other starter templates listed at &lt;a href=&quot;https://www.gatsbyjs.com/starters&quot;&gt;Gatsby’s website&lt;/a&gt;. Fire up a terminal of your choice and execute the following command. This is where the blog will be created in your machine, so pick a desired location.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;gatsby new my-awesome-blog https://github.com/gatsbyjs/gatsby-starter-blog&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now you will open &lt;code class=&quot;language-text&quot;&gt;gatsby-config.js&lt;/code&gt; to update basic settings for the newly created blog. Locate &lt;code class=&quot;language-text&quot;&gt;siteMedataData&lt;/code&gt; and make the necessary changes by updating site title, author name etc. All the markdown content is located at &lt;code class=&quot;language-text&quot;&gt;app/content/blog&lt;/code&gt; where each article is in its own folder.&lt;/p&gt;
+&lt;p&gt;Now let’s create a new github repository called &lt;code class=&quot;language-text&quot;&gt;my-awesome-blog&lt;/code&gt;. You can either visit &lt;a href=&quot;https://github.com&quot;&gt;Github&lt;/a&gt; or use &lt;a href=&quot;https://hub.github.com/&quot;&gt;hub&lt;/a&gt; from your command line to create your new repository. Once you are done creating the repository, fire up your favorite terminal and execute the following commands&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Important : Replace username with your github username and repository with the name of newly created github repository.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git remote add origin git@github.com:my-awesome-github-username/my-awesome-blog.git&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git commit -m &amp;quot;Initial Commit&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Push your changes to github&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git push --set-upstream origin master&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Configure auto publishing&lt;/h4&gt;
+&lt;p&gt;The idea is to setup a workflow such that every new commit to the master branch would automatically publish it to github pages. To achieve this we will complete the following one time setup steps&lt;/p&gt;
+&lt;h5&gt;Create an access token&lt;/h5&gt;
+&lt;p&gt;First, let’s create an access token. We will use this token in the workflow as a secret variable called &lt;code class=&quot;language-text&quot;&gt;ACCESS_TOKEN&lt;/code&gt; in a few minutes&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Use the instructions listed &lt;a href=&quot;https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token&quot;&gt;here&lt;/a&gt; to create an access token with &lt;code class=&quot;language-text&quot;&gt;repo&lt;/code&gt; permissions&lt;/li&gt;
+&lt;li&gt;Use the instructions listed &lt;a href=&quot;https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets&quot;&gt;here&lt;/a&gt; to create a secret called &lt;code class=&quot;language-text&quot;&gt;ACCESS_TOKEN&lt;/code&gt; to use in the workflow&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5&gt;Create a github action&lt;/h5&gt;
+&lt;p&gt;You can create a github action in two different ways.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;By adding a &lt;code class=&quot;language-text&quot;&gt;.yml&lt;/code&gt; file to the root of your project under &lt;code class=&quot;language-text&quot;&gt;github/.workflows&lt;/code&gt; directory.&lt;/li&gt;
+&lt;li&gt;OR, by navigating to your repository in github and using the &lt;code class=&quot;language-text&quot;&gt;New Worflow&lt;/code&gt; option under &lt;code class=&quot;language-text&quot;&gt;Actions&lt;/code&gt; tab.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The latter will automatically create a commit and push it to your default branch in github.&lt;/p&gt;
+&lt;p&gt;In this blog we will use the first option. Let’s start by creating the directories and the file. Run the following commands from the root of the project&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;mkdir .github &amp;amp;&amp;amp; mkdir .github\workflows
+touch .github\workflows\azure.yml&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h5&gt;Configure the workflow&lt;/h5&gt;
+&lt;p&gt;Open &lt;code class=&quot;language-text&quot;&gt;azure.yml&lt;/code&gt; in an editor and paste the following content&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;yml&quot;&gt;&lt;pre class=&quot;language-yml&quot;&gt;&lt;code class=&quot;language-yml&quot;&gt;&lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Azure
+      
+&lt;span class=&quot;token key atrule&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token key atrule&quot;&gt;skip_deploy_on_missing_secrets&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean important&quot;&gt;true&lt;/span&gt;
+  
+&lt;span class=&quot;token key atrule&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token key atrule&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token key atrule&quot;&gt;branches&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; main
+  &lt;span class=&quot;token key atrule&quot;&gt;pull_request&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token key atrule&quot;&gt;types&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;opened&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; synchronize&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; reopened&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; closed&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;token key atrule&quot;&gt;branches&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; main
+
+&lt;span class=&quot;token key atrule&quot;&gt;jobs&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token key atrule&quot;&gt;build_and_deploy_job&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;  
+    &lt;span class=&quot;token key atrule&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; github.event_name == &apos;push&apos; &lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt; (github.event_name == &apos;pull_request&apos; &lt;span class=&quot;token important&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; github.event.action &lt;span class=&quot;token tag&quot;&gt;!=&lt;/span&gt; &apos;closed&apos;)
+    &lt;span class=&quot;token key atrule&quot;&gt;runs-on&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; ubuntu&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;latest
+    &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Build and Deploy Job
+    &lt;span class=&quot;token key atrule&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; azure
+    &lt;span class=&quot;token key atrule&quot;&gt;steps&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; actions/checkout@v2
+        &lt;span class=&quot;token key atrule&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;submodules&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean important&quot;&gt;true&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Build And Deploy
+        &lt;span class=&quot;token key atrule&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; builddeploy
+        &lt;span class=&quot;token key atrule&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Azure/static&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;web&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;apps&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;deploy@v1
+        &lt;span class=&quot;token key atrule&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;azure_static_web_apps_api_token&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; $&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; secrets.DEPLOYMENT_TOKEN &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;repo_token&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; $&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; secrets.GITHUB_TOKEN &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;# Used for Github integrations (i.e. PR comments)&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;upload&quot;&lt;/span&gt;
+          &lt;span class=&quot;token comment&quot;&gt;###### Repository/Build Configurations - These values can be configured to match your app requirements. ######&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;app_location&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;app&quot;&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;# App source code path&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;api_location&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;api&quot;&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;# Api source code path - optional&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;output_location&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&quot;&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;# Built app content directory - optional&lt;/span&gt;
+          &lt;span class=&quot;token comment&quot;&gt;###### End of Repository/Build Configurations ######&lt;/span&gt;
+
+  &lt;span class=&quot;token key atrule&quot;&gt;close_pull_request_job&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token key atrule&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; github.event_name == &apos;pull_request&apos; &lt;span class=&quot;token important&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; github.event.action == &apos;closed&apos;
+    &lt;span class=&quot;token key atrule&quot;&gt;runs-on&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; ubuntu&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;latest
+    &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Close Pull Request Job
+    &lt;span class=&quot;token key atrule&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; azure
+    &lt;span class=&quot;token key atrule&quot;&gt;steps&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Close Pull Request
+        &lt;span class=&quot;token key atrule&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; closepullrequest
+        &lt;span class=&quot;token key atrule&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Azure/static&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;web&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;apps&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;deploy@v1
+        &lt;span class=&quot;token key atrule&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;azure_static_web_apps_api_token&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; $&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; secrets.DEPLOYMENT_TOKEN &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;close&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;For more information regarding Static Web App workflow configurations, please visit: &lt;a href=&quot;https://aka.ms/swaworkflowconfig&quot;&gt;https://aka.ms/swaworkflowconfig&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Next create a commit&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git commit -m &amp;quot;Add publishing workflow for Azure static web app&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And push your changes to github&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git push&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now navigate to the actions tab in github. You should observe a workflow action running. Wait until it completes.&lt;/p&gt;
+&lt;p&gt;As soon as the workflow completes successfully, your site should be running in Azure Static Web app.&lt;/p&gt;
+&lt;p&gt;Awesome Job !!!&lt;/p&gt;
+&lt;h4&gt;Publishing Workflow&lt;/h4&gt;
+&lt;p&gt;Now whenever you want to add a new article to your blog or update your sites content, you would add/update markdown files to your new created github repository. You can do so in different ways.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Add/update markdown files from github using their web editor and save. This will automatically create a commit in the github repository.&lt;/li&gt;
+&lt;li&gt;OR, Add/update content locally, create a commit and push it to the remote github repository.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Pushing a commit to the master branch will trigger the workflow we created above and publish your site to Azure SWA.&lt;/p&gt;
+&lt;p&gt;If you want to add/update content locally first:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Make changes in &lt;code class=&quot;language-text&quot;&gt;content/blog&lt;/code&gt; folder&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;To preivew changes locally run &lt;code class=&quot;language-text&quot;&gt;gatsby develop&lt;/code&gt; from the root of your project folder. This will start a localhost server pointing to the folder in your machine. This also watches for changes and referesh the browser automatically.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;Create a commit&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git commit -m &amp;quot;new article xyz&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;Push your changes to github&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git push&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This should start the worflow we configured above and publish any new changes to Azure SWA.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Thats it folks !!!&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[How to create a personal blog using Gatsby, Github Pages & Github Actions]]></title><description><![CDATA[In this article we will explore a set of tools and services which will let you build a personal blog and help setup an automated publishing…]]></description><link>https://roshangautam.com/how-to-create-personal-blog-gatsby-github-pages-github-actions/</link><guid isPermaLink="false">https://roshangautam.com/how-to-create-personal-blog-gatsby-github-pages-github-actions/</guid><pubDate>Sat, 10 Jul 2021 00:00:00 GMT</pubDate><content:encoded>&lt;p style=&quot;text-align: center;&quot;&gt;
+  &lt;img src=&quot;/5f16c897f756084c73f0df782d8a0baf/personal-websites-101.svg&quot;&gt;
+&lt;/p&gt;
+&lt;p&gt;In this article we will explore a set of tools and services which will let you build a personal blog and help setup an automated publishing pipeline. The idea is to write your content in markdown and publish it to github pages.&lt;/p&gt;
+&lt;p&gt;To build a personal blog we need to solve for the following&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A server to host your blog,&lt;/li&gt;
+&lt;li&gt;An easy way to write &amp;#x26; publish your content.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Getting Started&lt;/h2&gt;
+&lt;h3&gt;&lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;To solve our first problem, we will use github pages to host our personal blog. If you own a personal domain, you can configure github pages to use your custom domain at no cost. Isn’t that wonderful.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If you don’t have a github account, please visit &lt;a href=&quot;https://github.com&quot;&gt;Github&lt;/a&gt; and signup for a free account.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;&lt;a href=&quot;https://www.gatsbyjs.com/&quot;&gt;Gatsby&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;To solve our second problem, we will using Gatsby to write our content. Gatsby is a static site generator framework built using react/javascript and provides pre built blogging templates. The best part is you can create your content using &lt;a href=&quot;https://www.markdownguide.org/&quot;&gt;markdown&lt;/a&gt; and dont worry about any other technicalities. Gatsby will generate an html version of the content written in Markdown. Pick a template and off you go.&lt;/p&gt;
+&lt;p&gt;To publish the content written in markdown &amp;#x26; Gatsby’s blog template, we will use &lt;a href=&quot;https://github.com/features/actions&quot;&gt;github actions&lt;/a&gt;. The minute you will add/update content and save it to your github repository an automated workflow will run and generate an html version of your markdown content and publish it to github pages.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;There are several other static site generators available online. You can use any of them. For this article we are using Gatsby.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Let’s walk through the steps required to get you up and running.&lt;/p&gt;
+&lt;h4&gt;Install required tools&lt;/h4&gt;
+&lt;p&gt;Install the following tools. Skip this step if you already have’em&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://code.visualstudio.com/&quot;&gt;VS Code&lt;/a&gt; - Editor of choice. Install markdown extensions to help with content writing&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://nodejs.org&quot;&gt;NodeJS&lt;/a&gt; - To run your blog locally&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.gatsbyjs.com/docs/tutorial/part-0/#gatsby-cli&quot;&gt;Gatsby Cli&lt;/a&gt; - To create and run your blog locally&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://hub.github.com/&quot;&gt;Hub&lt;/a&gt; - Optional, used to maintain github account from a command line&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;macOS users can use &lt;a href=&quot;https://brew.sh/&quot;&gt;homebrew&lt;/a&gt; to install these tools. Likewise, you can use
+&lt;a href=&quot;https://chocolatey.org/&quot;&gt;chocolatey&lt;/a&gt; in Windows and &lt;code class=&quot;language-text&quot;&gt;yum/apt&lt;/code&gt; in Redhat or Debian based Linux distros.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4&gt;Project Setup&lt;/h4&gt;
+&lt;p&gt;Let’s create a new Gatsby site using the &lt;a href=&quot;https://www.gatsbyjs.com/starters/gatsbyjs/gatsby-starter-blog/&quot;&gt;blog starter template&lt;/a&gt;. You can use any other starter templates listed at &lt;a href=&quot;https://www.gatsbyjs.com/starters&quot;&gt;Gatsby’s website&lt;/a&gt;. Fire up a terminal of your choice and execute the following command. This is where the blog will be created in your machine, so pick a desired location.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;gatsby new my-awesome-blog https://github.com/gatsbyjs/gatsby-starter-blog&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now you will open &lt;code class=&quot;language-text&quot;&gt;gatsby-config.js&lt;/code&gt; to update basic settings for the newly created blog. Locate &lt;code class=&quot;language-text&quot;&gt;siteMedataData&lt;/code&gt; and make the necessary changes by updating site title, author name etc. All the markdown content is located at &lt;code class=&quot;language-text&quot;&gt;app/content/blog&lt;/code&gt; where each article is in its own folder.&lt;/p&gt;
+&lt;p&gt;Now let’s create a new github repository called &lt;code class=&quot;language-text&quot;&gt;my-awesome-blog&lt;/code&gt;. You can either visit &lt;a href=&quot;https://github.com&quot;&gt;Github&lt;/a&gt; or use &lt;a href=&quot;https://hub.github.com/&quot;&gt;hub&lt;/a&gt; from your command line to create your new repository. Once you are done creating the repository, fire up your favorite terminal and execute the following commands&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Important : Replace username with your github username and repository with the name of newly created github repository.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git remote add origin git@github.com:my-awesome-github-username/my-awesome-blog.git&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git commit -m &amp;quot;Initial Commit&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Push your changes to github&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git push --set-upstream origin master&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Configure auto publishing&lt;/h4&gt;
+&lt;p&gt;The idea is to setup a workflow such that every new commit to the master branch would automatically publish it to github pages. To achieve this we will complete the following one time setup steps&lt;/p&gt;
+&lt;h5&gt;Create an access token&lt;/h5&gt;
+&lt;p&gt;First, let’s create an access token. We will use this token in the workflow as a secret variable called &lt;code class=&quot;language-text&quot;&gt;ACCESS_TOKEN&lt;/code&gt; in a few minutes&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Use the instructions listed &lt;a href=&quot;https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token&quot;&gt;here&lt;/a&gt; to create an access token with &lt;code class=&quot;language-text&quot;&gt;repo&lt;/code&gt; permissions&lt;/li&gt;
+&lt;li&gt;Use the instructions listed &lt;a href=&quot;https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets&quot;&gt;here&lt;/a&gt; to create a secret called &lt;code class=&quot;language-text&quot;&gt;ACCESS_TOKEN&lt;/code&gt; to use in the workflow&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5&gt;Create a github action&lt;/h5&gt;
+&lt;p&gt;You can create a github action in two different ways.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;By adding a &lt;code class=&quot;language-text&quot;&gt;.yml&lt;/code&gt; file to the root of your project under &lt;code class=&quot;language-text&quot;&gt;github/.workflows&lt;/code&gt; directory.&lt;/li&gt;
+&lt;li&gt;OR, by navigating to your repository in github and using the &lt;code class=&quot;language-text&quot;&gt;New Worflow&lt;/code&gt; option under &lt;code class=&quot;language-text&quot;&gt;Actions&lt;/code&gt; tab.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The latter will automatically create a commit and push it to your default branch in github.&lt;/p&gt;
+&lt;p&gt;In this blog we will use the first option. Let’s start by creating the directories and the file. Run the following commands from the root of the project&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;mkdir .github &amp;amp;&amp;amp; mkdir .github\workflows
+touch .github\workflows\gh-pages.yml&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h5&gt;Configure the workflow&lt;/h5&gt;
+&lt;p&gt;Open &lt;code class=&quot;language-text&quot;&gt;gh-pages.yml&lt;/code&gt; in an editor and paste the following content&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;yml&quot;&gt;&lt;pre class=&quot;language-yml&quot;&gt;&lt;code class=&quot;language-yml&quot;&gt;&lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Publish to Github Pages
+
+&lt;span class=&quot;token key atrule&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;push&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;token key atrule&quot;&gt;jobs&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token key atrule&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token key atrule&quot;&gt;runs-on&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; ubuntu&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;latest
+    &lt;span class=&quot;token key atrule&quot;&gt;steps&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; actions/checkout@v1
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; enriikke/gatsby&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;gh&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;pages&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;action@v2
+        &lt;span class=&quot;token key atrule&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;access-token&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; $&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; secrets.ACCESS_TOKEN &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;deploy-branch&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; gh&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;pages&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This is telling github to use &lt;a href=&quot;https://github.com/enriikke/gatsby-gh-pages-action&quot;&gt;Gatsby Github action&lt;/a&gt; which takes care of building the static content and publishing it to &lt;code class=&quot;language-text&quot;&gt;gh-pages&lt;/code&gt; branch in the github repository. Learn more about other input options available in the action &lt;a href=&quot;https://github.com/enriikke/gatsby-gh-pages-action#knobs--handles&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Next create a commit&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git commit -m &amp;quot;Add publishing workflow for github pages&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And push your changes to github&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git push&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now navigate to the actions tab in github. You should observe a workflow action running. Wait until it completes.&lt;/p&gt;
+&lt;p&gt;As soon as the workflow completes successfully, your site should be live at &lt;a href=&quot;http://username.github.io/repository&quot;&gt;http://username.github.io/repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Awesome Job !!!&lt;/p&gt;
+&lt;h4&gt;Publishing Workflow&lt;/h4&gt;
+&lt;p&gt;Now whenever you want to add a new article to your blog or update your sites content, you would add/update markdown files to your new created github repository. You can do so in different ways.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Add/update markdown files from github using their web editor and save. This will automatically create a commit in the github repository.&lt;/li&gt;
+&lt;li&gt;OR, Add/update content locally, create a commit and push it to the remote github repository.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Pushing a commit to the master branch will trigger the workflow we created above and publish your site to github pages.&lt;/p&gt;
+&lt;p&gt;If you want to add/update content locally first:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Make changes in &lt;code class=&quot;language-text&quot;&gt;content/blog&lt;/code&gt; folder&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;To preivew changes locally run &lt;code class=&quot;language-text&quot;&gt;gatsby develop&lt;/code&gt; from the root of your project folder. This will start a localhost server pointing to the folder in your machine. This also watches for changes and referesh the browser automatically.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;Create a commit&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git commit -m &amp;quot;new article xyz&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;Push your changes to github&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git push&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This should start the worflow we configured above and publish any new changes to github pages.&lt;/p&gt;
+&lt;h4&gt;Custom domains&lt;/h4&gt;
+&lt;p&gt;This all sounds good but what about custom domains? If you own a custom domain and want to point it to github pages&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Visit your github repository settings and add your custom domain to github pages settings as shown below&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/a0b00b487a4548b3113249b90fd8bfa4/7608e/github-pages-settings.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 80.37974683544303%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsTAAALEwEAmpwYAAACH0lEQVR42p1UiXLTMBT0/39dy5QZSBMSH7GTNLas+7SX0ZNL6VBgQJ6dfZLl9buk6lSf0J071E1D+N+x5mddUSmToMwCYwK0UIguIvqA5COi82QH6xFcKLAe3ub1SPyKNa1ZFdVRjfjCbziIC57HI/ZTjQM74zAP2I0d9qzH89iilj0a2eMkzjjyDq0a0KgBtTjjxDtcwh1slagOqcGT2+Gz2+NBf8Uns8OjafFoezyYHo+mx5PvcUCPI2HYuMe3Ddneo8NpGVAxMeNlGuFTQFgyIrFPnuCiI4QUaA/NU4CNkfbGZeM1kV0ppXG73TFNDOM4YZ45JjaDsZlszgWkVAQhJFRmk8D0gpjzVipSKBfFWIe2H9D1F3TDBVIbjFzCOP/Him51JRECVixZcGKM2uVUN7iPI4y1MMYQrLXQr+wSpHvzqgi9eZYHCeYPuShhCSmhlIIxr6IWSmuySdC+F/zh8TtB59Bfb7i83DFcX2jx70388QoJam3AGEMOPYeb/7Ysyy9IG5YPsW5YUOVKtl2Hpm1xvd2oqpxzzBlU5YL802Ln9EgIUTinY1IRo0wIaUEVQthESh7zfOISjMvfh7y+VffnkKltvA9wzqOwoxdpC+OfLocVJWStNeqmxfnc43K9Is9zLnNu30NDKQNt3dZalthaR4gxFg+zN1KVluFC0inJbcTmnEdRTs12YiauceMOOt8+IVBUfuOUEnn4Hb6w2YMjcJzFAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Github Pages Settings&quot;
+        title=&quot;Github Pages Settings&quot;
+        src=&quot;/static/a0b00b487a4548b3113249b90fd8bfa4/f058b/github-pages-settings.png&quot;
+        srcset=&quot;/static/a0b00b487a4548b3113249b90fd8bfa4/c26ae/github-pages-settings.png 158w,
+/static/a0b00b487a4548b3113249b90fd8bfa4/6bdcf/github-pages-settings.png 315w,
+/static/a0b00b487a4548b3113249b90fd8bfa4/f058b/github-pages-settings.png 630w,
+/static/a0b00b487a4548b3113249b90fd8bfa4/7608e/github-pages-settings.png 735w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Visit your domain registrars website and add one of these as an &lt;code class=&quot;language-text&quot;&gt;A&lt;/code&gt; record to your domain’s DNS settins&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;185.199.108.153
+185.199.109.153
+185.199.110.153
+185.199.111.153&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;You just need one of the entries to work. Depdending on how long does your DNS provider takes time to propagate the changes, your domain should start pointing at your github pages repo within a few minutes to a couple of hours. Read more about custom domains in github pages &lt;a href=&quot;https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This site is also hosted in github pages. You can find the repository &lt;a href=&quot;https://github.com/roshangautam/roshangautam&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Thats it folks !!!&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[How to create a personal blog using Jigsaw and Github Pages]]></title><description><![CDATA[In this article we will explore a set of tools and services which will let you build a personal static site super fast and with almost zero…]]></description><link>https://roshangautam.com/how-to-create-personal-blog-jigsaw-github-pages/</link><guid isPermaLink="false">https://roshangautam.com/how-to-create-personal-blog-jigsaw-github-pages/</guid><pubDate>Sun, 13 Jan 2019 00:00:00 GMT</pubDate><content:encoded>&lt;p style=&quot;text-align: center;&quot;&gt;
+  &lt;img src=&quot;/5f16c897f756084c73f0df782d8a0baf/personal-websites-101.svg&quot;&gt;
+&lt;/p&gt;
+&lt;p&gt;In this article we will explore a set of tools and services which will let you build a personal static site super fast and with almost zero cost. All you will need is 30 mins tops to get up and running excluding the time required to create your content.&lt;/p&gt;
+&lt;p&gt;To build a personal static website you need&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A server to host your static site,&lt;/li&gt;
+&lt;li&gt;A platform to create your static content.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Getting Started&lt;/h2&gt;
+&lt;h3&gt;&lt;a href=&quot;https://github.com&quot;&gt;Github&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;We will use github pages to host our static site. If you own a personal domain, you can configure github pages to use
+your custom domain at no cost. Isn’t that wonderful.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If you don’t have a github account, please visit &lt;a href=&quot;https://github.com&quot;&gt;Github&lt;/a&gt; and signup for a free account.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;&lt;a href=&quot;http://jigsaw.tighten.co&quot;&gt;Jigsaw&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Jigsaw is a wonderful static site generator built using components from &lt;a href=&quot;https://laravel.com/&quot;&gt;Laravel&lt;/a&gt;,
+&lt;a href=&quot;https://symfony.com/&quot;&gt;Symfony&lt;/a&gt; and &lt;a href=&quot;https://tailwindcss.com/&quot;&gt;Tailwind CSS&lt;/a&gt;. The best part is you can create your
+content using &lt;code class=&quot;language-text&quot;&gt;markdown&lt;/code&gt; and its supports &lt;code class=&quot;language-text&quot;&gt;svg&lt;/code&gt; out of the box.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;There are a plethora of static site generators available online. You can use any of them. For this article we are
+using Jigsaw.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Let’s walk through the steps required to get you up and running.&lt;/p&gt;
+&lt;h4&gt;Install required tools&lt;/h4&gt;
+&lt;p&gt;Install the following tools. Skip this step if you already have’em&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://getcomposer.org&quot;&gt;Composer&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://nodejs.org&quot;&gt;NodeJS&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://hub.github.com/&quot;&gt;hub&lt;/a&gt; - Optional, used to maintain github account from a command line&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;macOS users can use &lt;a href=&quot;https://brew.sh/&quot;&gt;homebrew&lt;/a&gt; to easily install these tools. Likewise, you can use
+&lt;a href=&quot;https://chocolatey.org/&quot;&gt;chocolatey&lt;/a&gt; in Windows and yum/apt in red hat or debian based linux distros.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4&gt;Project Setup&lt;/h4&gt;
+&lt;p&gt;Let’s create a new github repository. You can either visit &lt;a href=&quot;https://github.com&quot;&gt;Github&lt;/a&gt; or use
+&lt;a href=&quot;https://hub.github.com/&quot;&gt;hub&lt;/a&gt; from your command line to create your new repository. Matter of fact this very site is
+hosted in github pages. You can find the repository &lt;a href=&quot;https://github.com/roshangautam/roshangautam&quot;&gt;here&lt;/a&gt;. Once you are
+done creating the repository, fire up your favorite terminal and execute the following commands&lt;/p&gt;
+&lt;p&gt;Create a project directory&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;mkdir your-awesome-site &amp;amp;&amp;amp; cd your-awesome-site&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Initialize a git repository&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;git init&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Add remote origin to your project&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;git remote add origin git@github.com:username/repository.git&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Replace username with your github username and repository with the name of newly created github repository.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4&gt;Create your static site&lt;/h4&gt;
+&lt;p&gt;Let’s create your static site. Make sure you are in your project directory created above ^&lt;/p&gt;
+&lt;p&gt;Install Jigsaw to project&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;composer require tightenco/jigsaw&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Make sure ~/.composer/vendor/bin is in your $PATH.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Initialize Jigsaw with blog template&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;./vendor/bin/jigsaw init blog&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;FYI: Jigsaw also provides a docs template&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Customize your site. For more details on customizing your site content please visit Jigsaw’s
+&lt;a href=&quot;https://jigsaw.tighten.co/docs/installation/&quot;&gt;online documentation&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Once you are done customizing your site content&lt;/p&gt;
+&lt;p&gt;Prepare all files to be committed to your github repository&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;git add .&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Create a commit&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;git commit -m &amp;quot;Initial Commit&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Push your changes to github&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;git push --set-upstream origin master&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;Build &amp;#x26; Deploy&lt;/h4&gt;
+&lt;p&gt;Once you are comfortable with the content of your site. Execute the following commands to build your site and deploy it
+to &lt;code class=&quot;language-text&quot;&gt;github-pages&lt;/code&gt; branch of your repository&lt;/p&gt;
+&lt;p&gt;Build your static site&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;./vendor/bin/jigsaw build production&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This will generate your static site in a temporary directory called &lt;code class=&quot;language-text&quot;&gt;build_production&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Next, let’s setup a worktree to push &lt;code class=&quot;language-text&quot;&gt;build_production&lt;/code&gt; to &lt;code class=&quot;language-text&quot;&gt;gh-pages&lt;/code&gt; branch of your github repo&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;$ git worktree add build_production gh-pages&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Push/deploy &lt;code class=&quot;language-text&quot;&gt;build_production&lt;/code&gt; to &lt;code class=&quot;language-text&quot;&gt;github-pages&lt;/code&gt; branch of your repository&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;$ cd build_production &amp;amp;&amp;amp; git add . &amp;amp;&amp;amp; git commit -m &amp;quot;Deploy&amp;quot; &amp;amp;&amp;amp; git push origin gh-pages --force&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;As soon as your commit goes through, your site should be live at &lt;a href=&quot;http://username.github.io/repository&quot;&gt;http://username.github.io/repository&lt;/a&gt;. Voila !!!&lt;/p&gt;
+&lt;h4&gt;Custom domains&lt;/h4&gt;
+&lt;p&gt;This all sounds good but what about custom domains. If you own a custom domain and point it to github pages&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Visit your github repository settings and add your custom domain to github pages settings as shown below&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/a0b00b487a4548b3113249b90fd8bfa4/7608e/github-pages-settings.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 80.37974683544303%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAYAAAAWGF8bAAAACXBIWXMAAAsTAAALEwEAmpwYAAACH0lEQVR42p1UiXLTMBT0/39dy5QZSBMSH7GTNLas+7SX0ZNL6VBgQJ6dfZLl9buk6lSf0J071E1D+N+x5mddUSmToMwCYwK0UIguIvqA5COi82QH6xFcKLAe3ub1SPyKNa1ZFdVRjfjCbziIC57HI/ZTjQM74zAP2I0d9qzH89iilj0a2eMkzjjyDq0a0KgBtTjjxDtcwh1slagOqcGT2+Gz2+NBf8Uns8OjafFoezyYHo+mx5PvcUCPI2HYuMe3Ddneo8NpGVAxMeNlGuFTQFgyIrFPnuCiI4QUaA/NU4CNkfbGZeM1kV0ppXG73TFNDOM4YZ45JjaDsZlszgWkVAQhJFRmk8D0gpjzVipSKBfFWIe2H9D1F3TDBVIbjFzCOP/Him51JRECVixZcGKM2uVUN7iPI4y1MMYQrLXQr+wSpHvzqgi9eZYHCeYPuShhCSmhlIIxr6IWSmuySdC+F/zh8TtB59Bfb7i83DFcX2jx70388QoJam3AGEMOPYeb/7Ysyy9IG5YPsW5YUOVKtl2Hpm1xvd2oqpxzzBlU5YL802Ln9EgIUTinY1IRo0wIaUEVQthESh7zfOISjMvfh7y+VffnkKltvA9wzqOwoxdpC+OfLocVJWStNeqmxfnc43K9Is9zLnNu30NDKQNt3dZalthaR4gxFg+zN1KVluFC0inJbcTmnEdRTs12YiauceMOOt8+IVBUfuOUEnn4Hb6w2YMjcJzFAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Github Pages Settings&quot;
+        title=&quot;Github Pages Settings&quot;
+        src=&quot;/static/a0b00b487a4548b3113249b90fd8bfa4/f058b/github-pages-settings.png&quot;
+        srcset=&quot;/static/a0b00b487a4548b3113249b90fd8bfa4/c26ae/github-pages-settings.png 158w,
+/static/a0b00b487a4548b3113249b90fd8bfa4/6bdcf/github-pages-settings.png 315w,
+/static/a0b00b487a4548b3113249b90fd8bfa4/f058b/github-pages-settings.png 630w,
+/static/a0b00b487a4548b3113249b90fd8bfa4/7608e/github-pages-settings.png 735w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Visit your domain registrars website and add one of these as an &lt;code class=&quot;language-text&quot;&gt;A&lt;/code&gt; record to your domain’s DNS settins&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;185.199.108.153
+185.199.109.153
+185.199.110.153
+185.199.111.153&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;You just need one of the entries to work. Depdending on how long does your DNS provider takes time to propagate the
+changes, your domain should start pointing at your github pages repo within a few minutes to a couple of hours.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Thats it folks !!!&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Automation using curl and bash]]></title><description><![CDATA[Have you ever found yourself in a situation where you want to download a list of videos from an online course to watch them offline and…]]></description><link>https://roshangautam.com/automation-curl-bash/</link><guid isPermaLink="false">https://roshangautam.com/automation-curl-bash/</guid><pubDate>Sun, 01 Oct 2017 00:00:00 GMT</pubDate><content:encoded>&lt;p style=&quot;text-align: center;&quot;&gt;
+  &lt;span class=&quot;gatsby-resp-image-wrapper&quot; style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;&gt;
+      &lt;a class=&quot;gatsby-resp-image-link&quot; href=&quot;/static/4e0023ef6379e1029bfcc59b7fe349a6/cab8c/automating-video-downloads.png&quot; style=&quot;display: block&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;
+    &lt;span class=&quot;gatsby-resp-image-background-image&quot; style=&quot;padding-bottom: 53.79746835443038%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsTAAALEwEAmpwYAAACYUlEQVR42n2Sy2sTURjFsy4tUluxVmNtNSIJGaMJedSNCx/dKILuKhREUNzpUvAfEHcKujCWECaZxPSVNJMQDT7ShaKIyX2koy1tjQjmMUlmJk+Rka+dSKjU3XDvd35zzv2OLpEt9PG0uHuRlobCRNTPkcrYDKkefU4kYwDLTADLliBSLBySrAEkWwJEZuAOZmAWNKAFRiKb79PFaWFXlJb2RKg4PE/Kh2ZI1aDBjvuxYvWRpu3R58bZBx9aE+xy3epHig3uNKgBNBEq7gcGsHQxWuyP0tJezd3hEJGOBbHMAIxFDYcPi6cfrvy4Nre0cpV/K56ZFlp2DilWcA+zoAnTsh4YMVro1/FZiCsOLZDywVlSPQJ/5rBs8WPF4caq872QucAlazeml17cSr17PeEWVKcfyfYAViwwCxrQdmLreFocWKTivnlSHtHimjisnPCma65Qrm2/9LgQunx/VTz3dL1ynl3zRgTV4ckoLj9WTgaJZNJijwCDp6WBHYGeTM0VW23ZpsLSs0nuu3rRnVOnZn8+ia//tnnSNRfMdIAL24D/RIbNsrhm96L6eGxDdd3klcz14MZHfqVp9+LGKRbVdo7ctZQDUANtKWaI5EnXx1/lWubbcenenVjl7svcLwbcbcbFsllbyliYdC3lP7VhOFSxsV9Vxv8mPulNpa6wgmrhUHVzw9tqM/y3NolsoVcrdsflaKfYQSyZWdJmopkvTv7TN6ePNBk46yr2KGjA3VaxC726pJDv0VwOwsOCfQ1qgEghUjVyqG0MoKYJvuEM7rZgZT1oorQ4CIzkcr7nD21XPNY0XNQuAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
+  &lt;img class=&quot;gatsby-resp-image-image&quot; alt=&quot;automating video downloads&quot; title=&quot;automating video downloads&quot; src=&quot;/static/4e0023ef6379e1029bfcc59b7fe349a6/f058b/automating-video-downloads.png&quot; srcset=&quot;/static/4e0023ef6379e1029bfcc59b7fe349a6/c26ae/automating-video-downloads.png 158w,
+/static/4e0023ef6379e1029bfcc59b7fe349a6/6bdcf/automating-video-downloads.png 315w,
+/static/4e0023ef6379e1029bfcc59b7fe349a6/f058b/automating-video-downloads.png 630w,
+/static/4e0023ef6379e1029bfcc59b7fe349a6/cab8c/automating-video-downloads.png 744w&quot; sizes=&quot;(max-width: 630px) 100vw, 630px&quot; style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot;&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;
+&lt;/p&gt;
+&lt;p&gt;Have you ever found yourself in a situation where you want to download a list of videos from an online course to watch them offline and there is no option to download all the files at once ? Something similar happened to me today while trying to download all the videos from Adam Wathan’s Course Test-Driven Laravel – Build robust applications with TDD Thanks to Adam, he sent me a link to a page where all the videos are listed and has option to download each video either in HD or SD. But the problem was still there. Either I had to click on every link (a total of 142 videos) or use my ability to write code and get this done all at once. And of course I used my programming skills because programmers are lazy and like to create tools which helps them become more lazy. Here are the steps I followed:&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2&gt;Create a list of videos&lt;/h2&gt;
+&lt;p&gt;The first challenge was to create a list of links to all the videos listed in course page. So this is what I did&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Logged in to my account. This is important as all videos are private and need authentication&lt;/li&gt;
+&lt;li&gt;Right clicked and opened the dev tools and inspected one of the HD link tags&lt;/li&gt;
+&lt;li&gt;I noticed that HD links can be listed using the text HD links and has a class link-brand. So I ran following JS in dev tools console&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;document&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;querySelectorAll&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;http://a.link-brand&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;forEach&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token parameter&quot;&gt;el&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;el&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;text &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Download HD&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; console&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;el&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;href&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;This gave me a list of HD links to all episodes listed in the course. I copied them and pasted them in a file called videos.txt. We will use this file in our next step.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Download Videos&lt;/h2&gt;
+&lt;p&gt;The next step was to download all videos listed in the file we just created with a single command.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Just to test I executed a curl command on one of the links to check if it gets redirected to some other URL or not ? and Voila !!! it does get redirected to a different URL and the redirected url has a filename in it. And I thought, I must use the filename while saving the files to my machine to make it easy to know what episode I am on while watching offline.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;curl -s -w %{redirect_url} https://link.to.your.episode.net/and/all/id/token/blah/blah&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If you run this $redirect_url will contain the location of the video with additional params. I quickly wrote a shell script to leverage all this. Here’s the script&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;#!/bin/bash
+filename=&amp;quot;$1&amp;quot;
+curl=&amp;#39;/usr/bin/curl&amp;#39;
+args=&amp;quot;-s -w %{redirect_url}&amp;quot;
+while read -r url
+do
+    raw=&amp;quot;$($curl $args $url)&amp;quot;
+    encoded=&amp;quot;$(echo $raw | awk -F&amp;#39;[=&amp;amp;]&amp;#39; &amp;#39;{print $6}&amp;#39;)&amp;quot;
+    name=&amp;quot;$(python -c &amp;quot;import sys, urllib as ul; print ul.unquote_plus(&amp;#39;$encoded&amp;#39;)&amp;quot;)&amp;quot;
+    slug=&amp;quot;$(echo $name | iconv -t ascii//TRANSLIT | sed -E s/[^a-zA-Z0-9.]+/-/g |sed -E s/^-+\|-+$//g | tr A-Z a-z)&amp;quot;
+    wget -O &amp;quot;$slug&amp;quot; $raw
+done &amp;lt; &amp;quot;$filename&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This script is basically reading a list of urls from an external file ( the one we created in our first step) and then executing curl against each of them one by one and grabbing the redirect url, stripping out the filename query parameter from url, converting the filename into a slug and then finally using wget to save the video with this custom slugged name.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Save the script (videos.sh) along with the file containing the list of videos (videos.txt) and run the following command from your terminal
+&lt;blockquote&gt;
+&lt;p&gt;Make sure you change the permission of your .sh file to 755 and possibly put both files inside a directory. In your terminal navigate to the location of .sh and .txt files created in the steps above&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Getting started with Laravel]]></title><description><![CDATA[T Minus 50 Seconds The purpose of this article is to get your started with Laravel. This article assumes that you already have setup your…]]></description><link>https://roshangautam.com/laravel-getting-started/</link><guid isPermaLink="false">https://roshangautam.com/laravel-getting-started/</guid><pubDate>Sat, 23 Sep 2017 00:00:00 GMT</pubDate><content:encoded>&lt;p style=&quot;text-align: center;&quot;&gt;
+  &lt;span class=&quot;gatsby-resp-image-wrapper&quot; style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;&gt;
+      &lt;a class=&quot;gatsby-resp-image-link&quot; href=&quot;/static/a86bceb76b842b2b8049caa20e10eb0c/cab8c/getting-started-with-laravel.png&quot; style=&quot;display: block&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;
+    &lt;span class=&quot;gatsby-resp-image-background-image&quot; style=&quot;padding-bottom: 53.79746835443038%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsTAAALEwEAmpwYAAACy0lEQVR42m2SWU8aURiGuTY11qWtS91FiSCapjdtXaJJl7/gL/CuNml62z/QP9BoEVBEGBbZHJSgVkvdWoow55xBY6w2VZFtYAYngjDTHKqRNL34ki/nvO9zvjffkXjoWDmJ4lUulKh1wGTjPEy1WWC60wTZbiPg+giY6TH+iHXiKvaA68N3WIO12IO9mOGho+WSRRSrWECJe06UrLdBpsUC09ISmHw6mHk5eyi+x4V7fFYClWKPEyUbMAOzJG4Ur1xAiQfX07WbISvDBiPgutUh/rV2T0x/IPdFXLhXh/hxI+CKUKzFHgdiGjHDjWKVEpLGcZO1dsg0WWG6g4CsnACcQgf4F1NUNqEKC+KcynmFSx0WRBWVZXQU/xxrTJCVYw/23sSWkChe7ULJOhtkmnEEAnJKM2ClGnD5dorKihO0kFvbPhDWt/aETyifV4GcqAWX70yA7SIg13MduxkzSJSo/i/QBNhObYgfn6QLot4XyS0ZvIKXWBFmfZGrSVoQpyn+jQmwshug/R/gbWSQ6jABHJlV6nfZwcmwcOT+fix6XCuFFXKtsOo/FKf2hF+6ADdAgOLDcuyxw+Rt5NKlWBHbRtCZLgO6UBpoXq4N8aP6w/y+/SRfcP6+KpiOrvZnKH5UT1/KDeiil6Avuszhi1Y7nXr4dynxypJvw9S7diOtTv+pzBY4V1gCsUfWQFyp24w/1WwzY5qd1Jh6i3li9Ud7bd9OH9sCUYXTfyLzbB50kMFIgyucrFlE0QqJh47dcYPzqvmf2fuhOWsf1OgHQzrzyIbjc7/P6Rte9Qb6/dalAVo792rD9WX4q2N9ZMfiGQrM2YeoGeLZwceJwW23r2X+OHfXC87KJct70bLilHSixh08q18IRpqcu+ftVsBILSAlI1Cm24gyCjOV6rGEGLkZpmUWxEodwVibKxRtIqnzOhLGajBjORwt+wPzJlBVrAE1YgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
+  &lt;img class=&quot;gatsby-resp-image-image&quot; alt=&quot;getting started with laravel&quot; title=&quot;getting started with laravel&quot; src=&quot;/static/a86bceb76b842b2b8049caa20e10eb0c/f058b/getting-started-with-laravel.png&quot; srcset=&quot;/static/a86bceb76b842b2b8049caa20e10eb0c/c26ae/getting-started-with-laravel.png 158w,
+/static/a86bceb76b842b2b8049caa20e10eb0c/6bdcf/getting-started-with-laravel.png 315w,
+/static/a86bceb76b842b2b8049caa20e10eb0c/f058b/getting-started-with-laravel.png 630w,
+/static/a86bceb76b842b2b8049caa20e10eb0c/cab8c/getting-started-with-laravel.png 744w&quot; sizes=&quot;(max-width: 630px) 100vw, 630px&quot; style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot;&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;
+&lt;/p&gt;
+&lt;h2&gt;T Minus 50 Seconds&lt;/h2&gt;
+&lt;p&gt;The purpose of this article is to get your started with Laravel. This article assumes that you already have setup your development environment (LEMP/LAMP) and composer. I prefer Laravel &lt;a href=&quot;https://github.com/weprovide/valet-plus&quot;&gt;Valet+&lt;/a&gt; on MacOS. Similar tools exist for both Windows and Linux users. Details about setting up development environment and other required tools is beyond the scope of this article.&lt;/p&gt;
+&lt;h2&gt;T Minus 30 Seconds&lt;/h2&gt;
+&lt;p&gt;Fire up your favorite terminal and type the following&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;$ composer global install laravel/installer&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;T Minus 20 Seconds&lt;/h2&gt;
+&lt;p&gt;Whip a new Laravel application using the following command laravel new ThisWillRockYourWorld&lt;/p&gt;
+&lt;h2&gt;T Minus 10 Seconds&lt;/h2&gt;
+&lt;p&gt;Open your favorite browser to navigate to your project url based on your setup. For e.g. ThisWillRockYourWorld.dev Or, localhost/ThisWillRockYourWorld&lt;/p&gt;
+&lt;h2&gt;Lift Off&lt;/h2&gt;
+&lt;p&gt;Feel Awesome. You Rock.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[How to reset mysql root password ?]]></title><description><![CDATA[Did you forget your mysql root password ? Do you have ssh access to your server ? If the answer to these questions is a YES then follow the…]]></description><link>https://roshangautam.com/mysql-root-password-reset/</link><guid isPermaLink="false">https://roshangautam.com/mysql-root-password-reset/</guid><pubDate>Wed, 28 May 2014 00:00:00 GMT</pubDate><content:encoded>&lt;p style=&quot;text-align: center;&quot;&gt;
+  &lt;span class=&quot;gatsby-resp-image-wrapper&quot; style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;&gt;
+      &lt;a class=&quot;gatsby-resp-image-link&quot; href=&quot;/static/e9b47c13299f0eb54b6f8d3c4d4364fa/990cb/mysql-logo.jpg&quot; style=&quot;display: block&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;
+    &lt;span class=&quot;gatsby-resp-image-background-image&quot; style=&quot;padding-bottom: 41.77215189873418%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAIABQDASIAAhEBAxEB/8QAFwABAAMAAAAAAAAAAAAAAAAAAAECBf/EABUBAQEAAAAAAAAAAAAAAAAAAAEA/9oADAMBAAIQAxAAAAHZkC4n/8QAFxABAQEBAAAAAAAAAAAAAAAAAQARE//aAAgBAQABBQLoS7F//8QAFhEAAwAAAAAAAAAAAAAAAAAAAhAh/9oACAEDAQE/ARq//8QAFxEBAAMAAAAAAAAAAAAAAAAAAAIRIf/aAAgBAgEBPwGWLf/EABgQAAIDAAAAAAAAAAAAAAAAAAABECEx/9oACAEBAAY/ArTRkf/EABkQAAIDAQAAAAAAAAAAAAAAAAABESFRkf/aAAgBAQABPyHANaEwcuDVZ//aAAwDAQACAAMAAAAQh9//xAAXEQADAQAAAAAAAAAAAAAAAAAAAREh/9oACAEDAQE/ENoyH//EABYRAQEBAAAAAAAAAAAAAAAAAAEAEf/aAAgBAgEBPxBp0if/xAAdEAEAAQMFAAAAAAAAAAAAAAABEQAhUTFBYcHx/9oACAEBAAE/EIndkwA9owrN+Q902SNHNf/Z&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
+  &lt;img class=&quot;gatsby-resp-image-image&quot; alt=&quot;mysql logo&quot; title=&quot;mysql logo&quot; src=&quot;/static/e9b47c13299f0eb54b6f8d3c4d4364fa/828fb/mysql-logo.jpg&quot; srcset=&quot;/static/e9b47c13299f0eb54b6f8d3c4d4364fa/ff44c/mysql-logo.jpg 158w,
+/static/e9b47c13299f0eb54b6f8d3c4d4364fa/a6688/mysql-logo.jpg 315w,
+/static/e9b47c13299f0eb54b6f8d3c4d4364fa/828fb/mysql-logo.jpg 630w,
+/static/e9b47c13299f0eb54b6f8d3c4d4364fa/0ede0/mysql-logo.jpg 945w,
+/static/e9b47c13299f0eb54b6f8d3c4d4364fa/990cb/mysql-logo.jpg 1020w&quot; sizes=&quot;(max-width: 630px) 100vw, 630px&quot; style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot; loading=&quot;lazy&quot; decoding=&quot;async&quot;&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;
+&lt;/p&gt;
+&lt;p&gt;Did you forget your mysql root password ? Do you have ssh access to your server ? If the answer to these questions is a YES then follow the instructions below to reset the root password for your mysql instance.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Stop &lt;strong&gt;mysqld&lt;/strong&gt; and restart it with the &lt;code class=&quot;language-text&quot;&gt;--skip-grant-tables&lt;/code&gt; option. This enables anyone to connect without a password and with all privileges. Because this is insecure, you might want to use &lt;code class=&quot;language-text&quot;&gt;--skip-grant-tables&lt;/code&gt; in conjunction with &lt;code class=&quot;language-text&quot;&gt;--skip-networking&lt;/code&gt; to prevent remote clients from connecting.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Connect to mysql server with this command:&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;$ **`mysql`**&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;Issue the following statements in the mysql client. Replace the password with the password that you want to use.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sbtshell&quot;&gt;&lt;pre class=&quot;language-sbtshell&quot;&gt;&lt;code class=&quot;language-sbtshell&quot;&gt;mysql&amp;gt; **`UPDATE mysql.user SET Password=PASSWORD(&amp;#39;MyNewPass&amp;#39;)`**-&amp;gt;**`WHERE User=&amp;#39;root&amp;#39;;`**mysql&amp;gt; **`FLUSH PRIVILEGES;`**&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The &lt;code class=&quot;language-text&quot;&gt;FLUSH&lt;/code&gt; statement tells the server to reload the grant tables into memory so that it notices the password change.&lt;/p&gt;
+&lt;p&gt;You should now be able to connect to the MySQL server as &lt;code class=&quot;language-text&quot;&gt;root&lt;/code&gt; using the new password. Stop the server, then restart it normally (without the &lt;code class=&quot;language-text&quot;&gt;--skip-grant-tables&lt;/code&gt; and &lt;code class=&quot;language-text&quot;&gt;--skip-networking&lt;/code&gt; options).&lt;/p&gt;</content:encoded></item></channel></rss>
