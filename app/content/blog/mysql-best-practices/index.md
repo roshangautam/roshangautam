@@ -9,9 +9,6 @@ author:
 ogImage:
   url: "/assets/images/posts/covers/mysql-logo.jpg"
 ---
-
-# MySQL Administration Best Practices
-
 ## Access and Credential Security
 
 ### Command Line Password Security
