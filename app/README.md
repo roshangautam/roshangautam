@@ -23,7 +23,7 @@ This blog is built using Gatsby. Install Gatsby CLI ([install instructions](http
     Navigate into your new site’s directory and start it up.
 
     ```shell
-    cd roshangautam/
+    cd roshangautam/app
     gatsby develop
     ```
 

@@ -1,14 +1,21 @@
-name: Github Pages
+name: Deploy to Github Pages
 
-on: [push]
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
     steps:
       - uses: actions/checkout@v1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18      
       - uses: enriikke/gatsby-gh-pages-action@v2
         with:
           working-dir: app

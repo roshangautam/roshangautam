@@ -1,6 +1,6 @@
 ---
 title: "How to create a personal blog using Gatsby, Github Pages & Github Actions"
-description: "In this article we will explore a set of tools and services which will let you build a personal blog super fast and with almost zero cost."
+description: "In this article we will explore a set of tools and services which will let you build a personal blog and help setup an automated publishing pipeline."
 coverImage: "/assets/images/posts/covers/personal-websites-101.svg"
 date: "2021-07-10"
 author:
@@ -177,7 +177,7 @@ This should start the worflow we configured above and publish any new changes to
 
 #### Custom domains
 
-This all sounds good but what about custom domains. If you own a custom domain and point it to github pages
+This all sounds good but what about custom domains? If you own a custom domain and want to point it to github pages
 
 - Visit your github repository settings and add your custom domain to github pages settings as shown below
 
@@ -192,8 +192,8 @@ This all sounds good but what about custom domains. If you own a custom domain a
 185.199.111.153
 ```
 
-> You just need one of the entries to work. Depdending on how long does your DNS provider takes time to propagate the
-> changes, your domain should start pointing at your github pages repo within a few minutes to a couple of hours.
+> You just need one of the entries to work. Depdending on how long does your DNS provider takes time to propagate the changes, your domain should start pointing at your github pages repo within a few minutes to a couple of hours. Read more about custom domains in github pages [here](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages)
+
 > This site is also hosted in github pages. You can find the repository [here](https://github.com/roshangautam/roshangautam).
 
 **_Thats it folks !!!_**
