@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[roshangautam]]></title><description><![CDATA[A personal blog by Roshan Gautam. Highly opinionated !!!]]></description><link>https://roshangautam.com</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 18 Jun 2026 18:24:31 GMT</lastBuildDate><item><title><![CDATA[Building Life Manager: A Full-Stack Application in Under an Hour with AI-Powered Development]]></title><description><![CDATA[The Genesis of an Idea It all started with a simple thought: “I need to try this thing called windsurf before it tries my patience :D.” This…]]></description><link>https://roshangautam.com/building-ai-powered-app/</link><guid isPermaLink="false">https://roshangautam.com/building-ai-powered-app/</guid><pubDate>Thu, 15 May 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;The Genesis of an Idea&lt;/h2&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[roshangautam]]></title><description><![CDATA[A personal blog by Roshan Gautam. Highly opinionated !!!]]></description><link>https://roshangautam.com</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 18 Jun 2026 18:47:21 GMT</lastBuildDate><item><title><![CDATA[Building Life Manager: A Full-Stack Application in Under an Hour with AI-Powered Development]]></title><description><![CDATA[The Genesis of an Idea It all started with a simple thought: “I need to try this thing called windsurf before it tries my patience :D.” This…]]></description><link>https://roshangautam.com/building-ai-powered-app/</link><guid isPermaLink="false">https://roshangautam.com/building-ai-powered-app/</guid><pubDate>Thu, 15 May 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;The Genesis of an Idea&lt;/h2&gt;
 &lt;p&gt;It all started with a simple thought: “I need to try this thing called windsurf before it tries my patience :D.” This single sentence sparked the creation of &lt;a href=&quot;https://github.com/roshangautam/life-manager&quot;&gt;Life Manager&lt;/a&gt;, a full-stack application built with FastAPI, React/Vite, and Docker - all developed in under an hour of active work over multiple days using cutting-edge AI tools.&lt;/p&gt;
 &lt;h2&gt;From Idea to PRD in Minutes&lt;/h2&gt;
 &lt;p&gt;The first step was turning that initial thought into a structured Product Requirements Document (PRD). Using Claude Sonnet 3.7, I described my vision:&lt;/p&gt;
@@ -85,7 +85,7 @@
 &lt;p&gt;The future of software development is here, and it’s collaborative - with AI handling the repetitive aspects while humans focus on creativity and problem-solving.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Best practices for general MySql administration]]></title><description><![CDATA[Access and Credential Security Command Line Password Security Avoid using passwords directly in command line: ⚠️ Warning: Using passwords in…]]></description><link>https://roshangautam.com/mysql-best-practices/</link><guid isPermaLink="false">https://roshangautam.com/mysql-best-practices/</guid><pubDate>Wed, 25 Dec 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;Access and Credential Security&lt;/h2&gt;
 &lt;h3&gt;Command Line Password Security&lt;/h3&gt;
 &lt;p&gt;Avoid using passwords directly in command line:&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;mysql -u testuser -pMyP@ss0rd  &lt;span class=&quot;token comment&quot;&gt;# Not recommended&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;mysql &lt;span class=&quot;token parameter variable&quot;&gt;-u&lt;/span&gt; testuser -pMyP@ss0rd  &lt;span class=&quot;token comment&quot;&gt;# Not recommended&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;⚠️ Warning: Using passwords in command line is insecure as they can be viewed in shell history.&lt;/p&gt;
 &lt;p&gt;Better alternatives:&lt;/p&gt;
 &lt;ul&gt;
@@ -198,17 +198,17 @@ SELECT TABLE_NAME from information_schema.TABLES where TABLE_SCHEMA &lt;span cla
 &lt;/blockquote&gt;
 &lt;h3&gt;Backup Commands&lt;/h3&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Full database backup&lt;/span&gt;
-mysqldump -u root -p --single-transaction --databases db1 --routines &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; db1_fullbkp.sql
+mysqldump &lt;span class=&quot;token parameter variable&quot;&gt;-u&lt;/span&gt; root &lt;span class=&quot;token parameter variable&quot;&gt;-p&lt;/span&gt; --single-transaction &lt;span class=&quot;token parameter variable&quot;&gt;--databases&lt;/span&gt; db1 &lt;span class=&quot;token parameter variable&quot;&gt;--routines&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; db1_fullbkp.sql
 
 &lt;span class=&quot;token comment&quot;&gt;# Compressed full database backup&lt;/span&gt;
-mysqldump -u root -p --single-transaction --databases db1 --routines &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; db1_fullbkp.sql.gz&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+mysqldump &lt;span class=&quot;token parameter variable&quot;&gt;-u&lt;/span&gt; root &lt;span class=&quot;token parameter variable&quot;&gt;-p&lt;/span&gt; --single-transaction &lt;span class=&quot;token parameter variable&quot;&gt;--databases&lt;/span&gt; db1 &lt;span class=&quot;token parameter variable&quot;&gt;--routines&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; db1_fullbkp.sql.gz&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Single table backup&lt;/span&gt;
-mysqldump -u  -h  -p --single-transaction db_name table_name --routines &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; db1_full.sql&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+mysqldump &lt;span class=&quot;token parameter variable&quot;&gt;-u&lt;/span&gt;  &lt;span class=&quot;token parameter variable&quot;&gt;-h&lt;/span&gt;  &lt;span class=&quot;token parameter variable&quot;&gt;-p&lt;/span&gt; --single-transaction db_name table_name &lt;span class=&quot;token parameter variable&quot;&gt;--routines&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; db1_full.sql&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3&gt;Restore Commands&lt;/h3&gt;
 &lt;p&gt;To reload a dump file, you must have the privileges required to execute the statements that it contains, such as the appropriate &lt;code class=&quot;language-text&quot;&gt;CREATE&lt;/code&gt; privileges for objects created by those statements.&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;mysql -u username -p db_name &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; db1_fullbkp.sql
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;mysql &lt;span class=&quot;token parameter variable&quot;&gt;-u&lt;/span&gt; username &lt;span class=&quot;token parameter variable&quot;&gt;-p&lt;/span&gt; db_name &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; db1_fullbkp.sql
 &lt;span class=&quot;token comment&quot;&gt;# OR for compressed files&lt;/span&gt;
-gunzip &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; db1_fullbkp.sql.gz &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; mysql -u username -p db_name&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+gunzip &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; db1_fullbkp.sql.gz &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; mysql &lt;span class=&quot;token parameter variable&quot;&gt;-u&lt;/span&gt; username &lt;span class=&quot;token parameter variable&quot;&gt;-p&lt;/span&gt; db_name&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2&gt;Replication Setup&lt;/h2&gt;
 &lt;h3&gt;Master Configuration&lt;/h3&gt;
 &lt;p&gt;Create replication user on MASTER with replication privileges.&lt;/p&gt;
@@ -255,10 +255,10 @@ gunzip &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; db1_fu
 &lt;blockquote&gt;
 &lt;p&gt;Important : Replace username with your github username and repository with the name of newly created github repository.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git remote add origin git@github.com:my-awesome-github-username/my-awesome-blog.git&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git commit -m &amp;quot;Initial Commit&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; remote &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; origin git@github.com:my-awesome-github-username/my-awesome-blog.git&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit &lt;span class=&quot;token parameter variable&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Initial Commit&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Push your changes to github&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git push --set-upstream origin master&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push --set-upstream origin master&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h4&gt;Configure auto publishing&lt;/h4&gt;
 &lt;p&gt;The idea is to setup a workflow such that every new commit to the master branch would automatically publish it to github pages. To achieve this we will complete the following one time setup steps&lt;/p&gt;
 &lt;h5&gt;Create an access token&lt;/h5&gt;
@@ -275,8 +275,8 @@ gunzip &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt; db1_fu
 &lt;/ul&gt;
 &lt;p&gt;The latter will automatically create a commit and push it to your default branch in github.&lt;/p&gt;
 &lt;p&gt;In this blog we will use the first option. Let’s start by creating the directories and the file. Run the following commands from the root of the project&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;mkdir .github &amp;amp;&amp;amp; mkdir .github\workflows
-touch .github\workflows\azure.yml&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;mkdir&lt;/span&gt; .github &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;mkdir&lt;/span&gt; .github&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;workflows
+&lt;span class=&quot;token function&quot;&gt;touch&lt;/span&gt; .github&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;workflows&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;azure.yml&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h5&gt;Configure the workflow&lt;/h5&gt;
 &lt;p&gt;Open &lt;code class=&quot;language-text&quot;&gt;azure.yml&lt;/code&gt; in an editor and paste the following content&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;yml&quot;&gt;&lt;pre class=&quot;language-yml&quot;&gt;&lt;code class=&quot;language-yml&quot;&gt;&lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Azure
@@ -332,9 +332,9 @@ touch .github\workflows\azure.yml&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
           &lt;span class=&quot;token key atrule&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;close&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;For more information regarding Static Web App workflow configurations, please visit: &lt;a href=&quot;https://aka.ms/swaworkflowconfig&quot;&gt;https://aka.ms/swaworkflowconfig&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Next create a commit&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git commit -m &amp;quot;Add publishing workflow for Azure static web app&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit &lt;span class=&quot;token parameter variable&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Add publishing workflow for Azure static web app&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;And push your changes to github&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git push&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Now navigate to the actions tab in github. You should observe a workflow action running. Wait until it completes.&lt;/p&gt;
 &lt;p&gt;As soon as the workflow completes successfully, your site should be running in Azure Static Web app.&lt;/p&gt;
 &lt;p&gt;Awesome Job !!!&lt;/p&gt;
@@ -355,11 +355,11 @@ touch .github\workflows\azure.yml&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ol start=&quot;2&quot;&gt;
 &lt;li&gt;Create a commit&lt;/li&gt;
 &lt;/ol&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git commit -m &amp;quot;new article xyz&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit &lt;span class=&quot;token parameter variable&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;new article xyz&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ol start=&quot;3&quot;&gt;
 &lt;li&gt;Push your changes to github&lt;/li&gt;
 &lt;/ol&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git push&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This should start the worflow we configured above and publish any new changes to Azure SWA.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;&lt;em&gt;Thats it folks !!!&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[How to create a personal blog using Gatsby, Github Pages & Github Actions]]></title><description><![CDATA[In this article we will explore a set of tools and services which will let you build a personal blog and help setup an automated publishing…]]></description><link>https://roshangautam.com/how-to-create-personal-blog-gatsby-github-pages-github-actions/</link><guid isPermaLink="false">https://roshangautam.com/how-to-create-personal-blog-gatsby-github-pages-github-actions/</guid><pubDate>Sat, 10 Jul 2021 00:00:00 GMT</pubDate><content:encoded>&lt;p style=&quot;text-align: center;&quot;&gt;
   &lt;img src=&quot;/5f16c897f756084c73f0df782d8a0baf/personal-websites-101.svg&quot;&gt;
@@ -403,10 +403,10 @@ touch .github\workflows\azure.yml&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Important : Replace username with your github username and repository with the name of newly created github repository.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git remote add origin git@github.com:my-awesome-github-username/my-awesome-blog.git&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git commit -m &amp;quot;Initial Commit&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; remote &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; origin git@github.com:my-awesome-github-username/my-awesome-blog.git&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit &lt;span class=&quot;token parameter variable&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Initial Commit&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Push your changes to github&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git push --set-upstream origin master&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push --set-upstream origin master&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h4&gt;Configure auto publishing&lt;/h4&gt;
 &lt;p&gt;The idea is to setup a workflow such that every new commit to the master branch would automatically publish it to github pages. To achieve this we will complete the following one time setup steps&lt;/p&gt;
 &lt;h5&gt;Create an access token&lt;/h5&gt;
@@ -423,8 +423,8 @@ touch .github\workflows\azure.yml&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;/ul&gt;
 &lt;p&gt;The latter will automatically create a commit and push it to your default branch in github.&lt;/p&gt;
 &lt;p&gt;In this blog we will use the first option. Let’s start by creating the directories and the file. Run the following commands from the root of the project&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;mkdir .github &amp;amp;&amp;amp; mkdir .github\workflows
-touch .github\workflows\gh-pages.yml&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;mkdir&lt;/span&gt; .github &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;mkdir&lt;/span&gt; .github&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;workflows
+&lt;span class=&quot;token function&quot;&gt;touch&lt;/span&gt; .github&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;workflows&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;gh-pages.yml&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h5&gt;Configure the workflow&lt;/h5&gt;
 &lt;p&gt;Open &lt;code class=&quot;language-text&quot;&gt;gh-pages.yml&lt;/code&gt; in an editor and paste the following content&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;yml&quot;&gt;&lt;pre class=&quot;language-yml&quot;&gt;&lt;code class=&quot;language-yml&quot;&gt;&lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Publish to Github Pages
@@ -442,9 +442,9 @@ touch .github\workflows\gh-pages.yml&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
           &lt;span class=&quot;token key atrule&quot;&gt;deploy-branch&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; gh&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;pages&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This is telling github to use &lt;a href=&quot;https://github.com/enriikke/gatsby-gh-pages-action&quot;&gt;Gatsby Github action&lt;/a&gt; which takes care of building the static content and publishing it to &lt;code class=&quot;language-text&quot;&gt;gh-pages&lt;/code&gt; branch in the github repository. Learn more about other input options available in the action &lt;a href=&quot;https://github.com/enriikke/gatsby-gh-pages-action#knobs--handles&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Next create a commit&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git commit -m &amp;quot;Add publishing workflow for github pages&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit &lt;span class=&quot;token parameter variable&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Add publishing workflow for github pages&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;And push your changes to github&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git push&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Now navigate to the actions tab in github. You should observe a workflow action running. Wait until it completes.&lt;/p&gt;
 &lt;p&gt;As soon as the workflow completes successfully, your site should be live at &lt;a href=&quot;http://username.github.io/repository&quot;&gt;http://username.github.io/repository&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Awesome Job !!!&lt;/p&gt;
@@ -465,11 +465,11 @@ touch .github\workflows\gh-pages.yml&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ol start=&quot;2&quot;&gt;
 &lt;li&gt;Create a commit&lt;/li&gt;
 &lt;/ol&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git commit -m &amp;quot;new article xyz&amp;quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit &lt;span class=&quot;token parameter variable&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;new article xyz&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ol start=&quot;3&quot;&gt;
 &lt;li&gt;Push your changes to github&lt;/li&gt;
 &lt;/ol&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;git push&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This should start the worflow we configured above and publish any new changes to github pages.&lt;/p&gt;
 &lt;h4&gt;Custom domains&lt;/h4&gt;
 &lt;p&gt;This all sounds good but what about custom domains? If you own a custom domain and want to point it to github pages&lt;/p&gt;
