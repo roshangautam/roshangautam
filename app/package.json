@@ -15,7 +15,6 @@
     "gatsby": "^5.16.1",
     "gatsby-plugin-feed": "5.3.1",
     "gatsby-plugin-gatsby-cloud": "5.3.1",
-    "gatsby-plugin-google-analytics": "^5.3.0",
     "gatsby-plugin-image": "3.3.2",
     "gatsby-plugin-manifest": "5.3.1",
     "gatsby-plugin-offline": "6.3.1",
