@@ -4,7 +4,11 @@ import { Link } from "gatsby"
 const Layout = ({ location, children, status }) => {
   const rootPath = `${__PATH_PREFIX__}/`
   const isRootPath = location.pathname === rootPath
-  const cwd = isRootPath ? `~` : `~/posts`
+  const cwd = isRootPath
+    ? `~`
+    : location.pathname.startsWith(`${__PATH_PREFIX__}/about`)
+    ? `~/about`
+    : `~/posts`
   const year = new Date().getFullYear()
 
   return (
@@ -17,11 +21,7 @@ const Layout = ({ location, children, status }) => {
           </Link>
           <nav className="tnav__links" aria-label="Primary">
             <Link to="/">posts</Link>
-            {isRootPath ? (
-                <a href="#about">about</a>
-              ) : (
-                <Link to="/#about">about</Link>
-              )}
+            <Link to="/about">about</Link>
             <a href="/rss.xml">rss</a>
             <a
               href="https://github.com/roshangautam"

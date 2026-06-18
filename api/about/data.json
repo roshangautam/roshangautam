@@ -1,4 +1,42 @@
 {
-    "name": "Roshan",
-    "description": "Everybody is a nobody but nobody is not everybody"
+  "bio": "Senior Software Engineering Manager at LinkedIn, leading teams that build case management, omni-channel routing, and ML-driven pattern recognition for customer experience. 20+ years across distributed systems, SRE, and developer tooling — from telecom platforms serving millions in Kathmandu, to university smart-campus apps, to enterprise systems at LinkedIn. I care about clean systems, mentoring engineers, and shipping.",
+  "experience": [
+    { "period": "2022—now",  "org": "LinkedIn", "role": "Sr. Software Engineering Manager", "note": "Case management, omni-channel routing & channels, data mining / pattern recognition." },
+    { "period": "2019—2022", "org": "LinkedIn", "role": "Software Engineering Manager", "note": "Enterprise apps across marketing, sales, support." },
+    { "period": "2018—2019", "org": "LinkedIn", "role": "Senior Software Engineer", "note": "" },
+    { "period": "2017—2018", "org": "LinkedIn", "role": "Software Engineer", "note": "Customer-support automation at scale — millions of users, ~25 languages." },
+    { "period": "2012—2017", "org": "Arkansas State University", "role": "Sr. Software Developer", "note": "Smart Campus iOS/Android apps + REST API, symposium & time-tracking systems. Mentored grad students." },
+    { "period": "2010—2012", "org": "Arkansas State University", "role": "Software Developer", "note": "LAMP / SharePoint / MySQL." },
+    { "period": "2005—2009", "org": "ZTE Corporation", "role": "(Sr.) Site Reliability Engineer", "note": "Kathmandu, Nepal. Telecom platforms (SMSC, VMS, WAP, MMSC) for 5M subscribers; tooling in C + shell." }
+  ],
+  "projects": [
+    { "name": "shazam",                  "stars": 7, "lang": "C#",  "desc": "Power Apps solution boilerplate & generator", "url": "https://github.com/roshangautam/shazam" },
+    { "name": "shazam-framework",        "stars": 2, "lang": "C#",  "desc": ".NET CLI for Power Platform development",     "url": "https://github.com/roshangautam/shazam-framework" },
+    { "name": "microsoft-dynamics-auth", "stars": 3, "lang": "Py",  "desc": "Dynamics 365 auth plugin for HTTPie",         "url": "https://github.com/roshangautam/microsoft-dynamics-auth" },
+    { "name": "sentinel-ldap",           "stars": 3, "lang": "PHP", "desc": "LDAP addon for Laravel Sentinel",            "url": "https://github.com/roshangautam/sentinel-ldap" },
+    { "name": "cmm-compiler",            "stars": 3, "lang": "C++", "desc": "Compiler for a C-minus-minus language",       "url": "https://github.com/roshangautam/cmm-compiler" },
+    { "name": "radiosity-engine",        "stars": 0, "lang": "C++", "desc": "Global-illumination rendering engine",       "url": "https://github.com/roshangautam/radiosity-engine" }
+  ],
+  "skills": {
+    "languages":  "Java · C# · Python · C++ · PHP · Bash · TypeScript",
+    "systems":    "Distributed Systems · SRE · Linux · ETL / HDFS",
+    "platforms":  "Azure · Power Platform · Gatsby · Laravel · MySQL",
+    "leadership": "Engineering Management · Mentoring · CI/CD · SOLID"
+  },
+  "contact": {
+    "email":    "contact@roshangautam.net",
+    "github":   "github.com/roshangautam",
+    "linkedin": "linkedin.com/in/roshangautam",
+    "twitter":  "twitter.com/roshangautam"
+  },
+  "education": [
+    { "degree": "M.S. Computer Science",     "org": "Arkansas State University",       "year": "2017" },
+    { "degree": "M.S. Engineering Management","org": "Arkansas State University",       "year": "2012" },
+    { "degree": "B.E. Computer Engineering",  "org": "Kantipur Engineering College",    "year": "2004" }
+  ],
+  "certifications": [
+    "Microsoft Azure Fundamentals",
+    "Microsoft Power Platform Fundamentals",
+    "gRPC Master Class"
+  ]
 }

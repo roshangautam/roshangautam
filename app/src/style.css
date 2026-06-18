@@ -295,6 +295,64 @@ a:focus-visible,
   white-space: nowrap;
 }
 
+.log {
+  margin: var(--space-lg) 0 var(--space-3xl);
+}
+.log > div {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  gap: var(--space-md);
+  align-items: baseline;
+  padding-block: var(--space-md);
+  border-bottom: 1px solid var(--color-rule);
+}
+.log > div > span:first-child {
+  font-size: var(--text-sm);
+  color: var(--color-ink-3);
+  white-space: nowrap;
+}
+.log > div > span:last-child {
+  color: var(--color-ink-2);
+}
+.log b {
+  display: block;
+  color: var(--color-ink);
+  font-weight: 700;
+}
+.log b + span {
+  display: block;
+  color: var(--color-ink-2);
+  font-size: var(--text-sm);
+  margin-top: var(--space-xs);
+}
+
+.kv {
+  margin: var(--space-lg) 0 var(--space-3xl);
+}
+.kv > div {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  gap: var(--space-md);
+  align-items: baseline;
+  padding-block: var(--space-sm);
+  border-bottom: 1px solid var(--color-rule);
+}
+.kv > div > span:first-child {
+  font-size: var(--text-sm);
+  color: var(--color-ink-3);
+  white-space: nowrap;
+}
+.kv > div > span:last-child {
+  color: var(--color-ink-2);
+}
+.kv a:hover {
+  color: var(--color-accent);
+}
+
+.about-loading {
+  display: block;
+}
+
 /* ──────────────────────────────────────────────────────────────────
    Article (cat <slug>.md)
    ────────────────────────────────────────────────────────────────── */
