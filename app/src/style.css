@@ -13,11 +13,6 @@
   box-sizing: border-box;
 }
 
-html,
-body {
-  overflow-x: clip;
-}
-
 body {
   margin: 0;
   background-color: var(--color-paper);
@@ -50,7 +45,9 @@ body::before {
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5,
+h6 {
   font-family: var(--font-mono);
   font-style: normal;
   font-weight: 700;
@@ -113,7 +110,7 @@ a:focus-visible,
    ────────────────────────────────────────────────────────────────── */
 .tnav {
   border-bottom: 1px solid var(--color-rule);
-  background: oklch(15% 0.012 200 / 0.7);
+  background: var(--color-nav-bg);
   backdrop-filter: blur(8px);
   position: sticky;
   top: 0;
@@ -557,7 +554,7 @@ a:focus-visible,
   position: sticky;
   bottom: 0;
   border-top: 1px solid var(--color-rule);
-  background: oklch(14% 0.012 200 / 0.92);
+  background: var(--color-statusbar-bg);
   backdrop-filter: blur(8px);
 }
 .statusbar__row {
