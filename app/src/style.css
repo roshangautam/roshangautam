@@ -1,337 +1,624 @@
-/* CSS Custom Properties Definitions */
+/* Hallmark · genre: technical · macrostructure: Workbench + Long Document · theme: Terminal · nav: N8 · footer: status bar · design-system: design.md · designed-as-app */
+/* Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V5 */
+@import "./tokens.css";
 
-:root {
-    --maxWidth-none: "none";
-    --maxWidth-xs: 20rem;
-    --maxWidth-sm: 24rem;
-    --maxWidth-md: 28rem;
-    --maxWidth-lg: 32rem;
-    --maxWidth-xl: 36rem;
-    --maxWidth-2xl: 42rem;
-    --maxWidth-3xl: 48rem;
-    --maxWidth-4xl: 56rem;
-    --maxWidth-full: "100%";
-    --maxWidth-wrapper: var(--maxWidth-2xl);
-    --spacing-px: "1px";
-    --spacing-0: 0;
-    --spacing-1: 0.25rem;
-    --spacing-2: 0.5rem;
-    --spacing-3: 0.75rem;
-    --spacing-4: 1rem;
-    --spacing-5: 1.25rem;
-    --spacing-6: 1.5rem;
-    --spacing-8: 2rem;
-    --spacing-10: 2.5rem;
-    --spacing-12: 3rem;
-    --spacing-16: 4rem;
-    --spacing-20: 5rem;
-    --spacing-24: 6rem;
-    --spacing-32: 8rem;
-    --fontFamily-sans: Montserrat, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    --fontFamily-serif: "Merriweather", "Georgia", Cambria, "Times New Roman", Times, serif;
-    --font-body: var(--fontFamily-serif);
-    --font-heading: var(--fontFamily-sans);
-    --fontWeight-normal: 400;
-    --fontWeight-medium: 500;
-    --fontWeight-semibold: 600;
-    --fontWeight-bold: 700;
-    --fontWeight-extrabold: 800;
-    --fontWeight-black: 900;
-    --fontSize-root: 16px;
-    --lineHeight-none: 1;
-    --lineHeight-tight: 1.1;
-    --lineHeight-normal: 1.5;
-    --lineHeight-relaxed: 1.625;
-    /* 1.200 Minor Third Type Scale */
-    --fontSize-0: 0.833rem;
-    --fontSize-1: 1rem;
-    --fontSize-2: 1.2rem;
-    --fontSize-3: 1.44rem;
-    --fontSize-4: 1.728rem;
-    --fontSize-5: 2.074rem;
-    --fontSize-6: 2.488rem;
-    --fontSize-7: 2.986rem;
-    --color-primary: #005b99;
-    --color-text: #2e353f;
-    --color-text-light: #4f5969;
-    --color-heading: #1a202c;
-    --color-heading-black: black;
-    --color-accent: #d1dce5;
-}
-
-
-/* HTML elements */
-
+/* ──────────────────────────────────────────────────────────────────
+   Base
+   normalize.css + prism-tomorrow.css are imported before this file in
+   gatsby-browser.js, so .prose overrides below win on equal specificity.
+   ────────────────────────────────────────────────────────────────── */
 *,
-:after,
-:before {
-    box-sizing: border-box;
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-html {
-    line-height: var(--lineHeight-normal);
-    font-size: var(--fontSize-root);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+html,
+body {
+  overflow-x: clip;
 }
 
 body {
-    font-family: var(--font-body);
-    font-size: var(--fontSize-1);
-    color: var(--color-text);
+  margin: 0;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background-image: radial-gradient(
+    var(--color-accent) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+  background-attachment: fixed;
 }
 
-footer {
-    padding: var(--spacing-6) var(--spacing-0);
+/* dot grid faintly, without washing out text */
+body {
+  background-blend-mode: normal;
 }
-
-hr {
-    background: var(--color-accent);
-    height: 1px;
-    border: 0;
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: var(--color-paper);
+  opacity: 0.95;
+  z-index: -1;
 }
-
-
-/* Heading */
 
 h1,
 h2,
 h3,
-h4,
-h5,
-h6 {
-    font-family: var(--font-heading);
-    margin-top: var(--spacing-12);
-    margin-bottom: var(--spacing-6);
-    line-height: var(--lineHeight-tight);
-    letter-spacing: -0.025em;
-}
-
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-weight: var(--fontWeight-bold);
-    color: var(--color-heading);
-}
-
-h1 {
-    font-weight: var(--fontWeight-black);
-    font-size: var(--fontSize-6);
-    color: var(--color-heading-black);
-}
-
-h2 {
-    font-size: var(--fontSize-5);
-}
-
-h3 {
-    font-size: var(--fontSize-4);
-}
-
 h4 {
-    font-size: var(--fontSize-3);
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  min-width: 0;
+  margin: 0;
 }
-
-h5 {
-    font-size: var(--fontSize-2);
-}
-
-h6 {
-    font-size: var(--fontSize-1);
-}
-
-h1>a {
-    color: inherit;
-    text-decoration: none;
-}
-
-h2>a,
-h3>a,
-h4>a,
-h5>a,
-h6>a {
-    text-decoration: none;
-    color: inherit;
-}
-
-
-/* Prose */
-
-p {
-    line-height: var(--lineHeight-relaxed);
-    --baseline-multiplier: 0.179;
-    --x-height-multiplier: 0.35;
-    margin: var(--spacing-0) var(--spacing-0) var(--spacing-8) var(--spacing-0);
-    padding: var(--spacing-0);
-}
-
-ul,
-ol {
-    margin-left: var(--spacing-0);
-    margin-right: var(--spacing-0);
-    padding: var(--spacing-0);
-    margin-bottom: var(--spacing-8);
-    list-style-position: outside;
-    list-style-image: none;
-}
-
-ul li,
-ol li {
-    padding-left: var(--spacing-0);
-    margin-bottom: calc(var(--spacing-8) / 2);
-    list-style-position: inside;
-}
-
-li>p {
-    margin-bottom: calc(var(--spacing-8) / 2);
-}
-
-li *:last-child {
-    margin-bottom: var(--spacing-0);
-}
-
-li>ul {
-    margin-left: var(--spacing-8);
-    margin-top: calc(var(--spacing-8) / 2);
-}
-
-blockquote {
-    color: var(--color-text-light);
-    margin-left: calc(-1 * var(--spacing-6));
-    margin-right: var(--spacing-8);
-    padding: var(--spacing-0) var(--spacing-0) var(--spacing-0) var(--spacing-6);
-    border-left: var(--spacing-1) solid var(--color-primary);
-    font-size: var(--fontSize-2);
-    font-style: italic;
-    margin-bottom: var(--spacing-8);
-}
-
-blockquote> :last-child {
-    margin-bottom: var(--spacing-0);
-}
-
-blockquote>ul,
-blockquote>ol {
-    list-style-position: inside;
-}
-
-table {
-    width: 100%;
-    margin-bottom: var(--spacing-8);
-    border-collapse: collapse;
-    border-spacing: 0.25rem;
-}
-
-table thead tr th {
-    border-bottom: 1px solid var(--color-accent);
-}
-
-
-/* Link */
 
 a {
-    color: var(--color-primary);
+  color: inherit;
+  text-decoration: none;
 }
 
-a:hover,
-a:focus {
-    text-decoration: none;
+img {
+  max-width: 100%;
+  height: auto;
 }
 
-
-/* Custom classes */
-
-.global-wrapper {
-    margin: var(--spacing-0) auto;
-    max-width: var(--maxWidth-wrapper);
-    padding: var(--spacing-10) var(--spacing-5);
+::selection {
+  background: var(--color-selection);
+  color: var(--color-ink);
 }
 
-.global-wrapper[data-is-root-path="true"] .bio {
-    margin-bottom: var(--spacing-20);
+a:focus-visible,
+.row:focus-visible,
+.np:focus-visible,
+.back:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
 }
 
-.global-header {
-    margin-bottom: var(--spacing-12);
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
 }
 
-.main-heading {
-    font-size: var(--fontSize-7);
-    margin: 0;
+.accent {
+  color: var(--color-accent);
+}
+.dim {
+  color: var(--color-ink-3);
 }
 
-.post-list-item {
-    margin-bottom: var(--spacing-8);
-    margin-top: var(--spacing-8);
+/* shell — keeps the status bar pinned to the bottom on short pages */
+.t-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.t-shell > main {
+  flex: 1 0 auto;
 }
 
-.post-list-item p {
-    margin-bottom: var(--spacing-0);
+/* ──────────────────────────────────────────────────────────────────
+   Terminal nav (N8)
+   ────────────────────────────────────────────────────────────────── */
+.tnav {
+  border-bottom: 1px solid var(--color-rule);
+  background: oklch(15% 0.012 200 / 0.7);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.tnav__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-block: var(--space-sm);
+  flex-wrap: wrap;
+}
+.tnav__prompt {
+  font-size: var(--text-sm);
+  color: var(--color-ink-2);
+  white-space: nowrap;
+}
+.tnav__prompt b {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+.tnav__links {
+  display: flex;
+  gap: var(--space-md);
+  font-size: var(--text-sm);
+}
+.tnav__links a {
+  color: var(--color-ink-2);
+}
+.tnav__links a::before {
+  content: "./";
+  color: var(--color-ink-3);
+}
+.tnav__links a:hover {
+  color: var(--color-accent);
 }
 
-.post-list-item h2 {
-    font-size: var(--fontSize-4);
-    color: var(--color-primary);
-    margin-bottom: var(--spacing-2);
-    margin-top: var(--spacing-0);
+/* ──────────────────────────────────────────────────────────────────
+   Hero prompt block (home)
+   ────────────────────────────────────────────────────────────────── */
+.hero {
+  padding-block: var(--space-4xl) var(--space-3xl);
+}
+.line {
+  font-size: var(--text-sm);
+  color: var(--color-ink-2);
+  margin: 0 0 var(--space-xs);
+}
+.line .pr {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+.hero__name {
+  font-size: var(--text-display-l);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: var(--space-xs) 0;
+  color: var(--color-ink);
+}
+.hero__name .blink {
+  color: var(--color-accent);
+}
+.hero__about {
+  font-size: var(--text-lg);
+  color: var(--color-ink-2);
+  max-width: 42rem;
+  margin: var(--space-md) 0 0;
+  line-height: 1.5;
+}
+.hero__about b {
+  color: var(--color-amber);
+  font-weight: 500;
+}
+.hero__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-lg);
+}
+.chip {
+  font-size: var(--text-xs);
+  color: var(--color-ink-2);
+  border: 1px solid var(--color-rule);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+}
+.chip::before {
+  content: "#";
+  color: var(--color-accent-dim);
 }
 
-.post-list-item header {
-    margin-bottom: var(--spacing-4);
-}
-
-.header-link-home {
-    font-weight: var(--fontWeight-bold);
-    font-family: var(--font-heading);
-    text-decoration: none;
-    font-size: var(--fontSize-2);
-}
-
-.bio {
-    display: flex;
-    margin-bottom: var(--spacing-16);
-}
-
-.bio p {
-    margin-bottom: var(--spacing-0);
-}
-
-.bio-avatar {
-    margin-right: var(--spacing-4);
-    margin-bottom: var(--spacing-0);
-    min-width: 50px;
-    border-radius: 100%;
-}
-
-.blog-post header h1 {
-    margin: var(--spacing-0) var(--spacing-0) var(--spacing-4) var(--spacing-0);
-}
-
-.blog-post header p {
-    font-size: var(--fontSize-2);
-    font-family: var(--font-heading);
-}
-
-.blog-post-nav ul {
-    margin: var(--spacing-0);
-}
-
-.gatsby-highlight {
-    margin-bottom: var(--spacing-8);
-}
-
-
-/* Media queries */
-
-@media (max-width: 42rem) {
-    blockquote {
-        padding: var(--spacing-0) var(--spacing-0) var(--spacing-0) var(--spacing-4);
-        margin-left: var(--spacing-0);
+@media (prefers-reduced-motion: no-preference) {
+  .blink {
+    animation: blink 1.05s steps(1) infinite;
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0;
     }
-    ul,
-    ol {
-        list-style-position: inside;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   Listing (ls -lt)
+   ────────────────────────────────────────────────────────────────── */
+.listing {
+  padding-block: var(--space-xl) var(--space-5xl);
+}
+.listing__cmd {
+  font-size: var(--text-sm);
+  color: var(--color-ink-2);
+  margin-bottom: var(--space-lg);
+}
+.listing__cmd .pr {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+.listing__head {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr) 4rem;
+  gap: var(--space-md);
+  font-size: var(--text-xs);
+  color: var(--color-ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding-block: var(--space-xs);
+  border-bottom: 1px solid var(--color-rule);
+}
+.row {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr) 4rem;
+  gap: var(--space-md);
+  align-items: baseline;
+  padding-block: var(--space-md);
+  border-bottom: 1px solid var(--color-rule);
+  transition: background var(--dur) var(--ease-out),
+    padding-left var(--dur) var(--ease-out);
+}
+.row:hover {
+  background: var(--color-paper-2);
+  padding-left: var(--space-sm);
+}
+.row__date {
+  font-size: var(--text-sm);
+  color: var(--color-ink-3);
+  white-space: nowrap;
+}
+.row__main {
+  min-width: 0;
+}
+.row__title {
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--color-ink);
+  display: inline;
+  line-height: 1.25;
+}
+.row:hover .row__title {
+  color: var(--color-accent);
+}
+.row__title::before {
+  content: "❯ ";
+  color: var(--color-accent-dim);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease-out);
+}
+.row:hover .row__title::before {
+  opacity: 1;
+}
+.row__desc {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--color-ink-2);
+  margin: var(--space-xs) 0 0;
+  max-width: 46rem;
+}
+.row__ext {
+  font-size: var(--text-xs);
+  color: var(--color-ink-3);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   Article (cat <slug>.md)
+   ────────────────────────────────────────────────────────────────── */
+.article.wrap {
+  max-width: var(--wrap-article);
+}
+.article {
+  padding-block: var(--space-2xl) var(--space-4xl);
+}
+.article__inner {
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--text-sm);
+  color: var(--color-ink-2);
+}
+.back .pr {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+.back:hover {
+  color: var(--color-accent);
+}
+.article__cmd {
+  font-size: var(--text-sm);
+  color: var(--color-ink-2);
+  margin-top: var(--space-xl);
+}
+.article__cmd .pr {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+.article__title {
+  font-size: var(--text-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-top: var(--space-sm);
+  color: var(--color-ink);
+}
+.article__meta {
+  font-size: var(--text-sm);
+  color: var(--color-ink-3);
+  margin-top: var(--space-sm);
+}
+.article__meta .accent {
+  color: var(--color-accent-dim);
+}
+.lede {
+  font-size: var(--text-lg);
+  line-height: 1.5;
+  color: var(--color-ink-2);
+  padding-left: var(--space-md);
+  border-left: 2px solid var(--color-accent-dim);
+  margin-top: var(--space-xl);
+}
+.lede b {
+  color: var(--color-amber);
+  font-weight: 500;
+}
+
+/* ── Prose (rendered markdown body) ── */
+.prose {
+  margin-top: var(--space-2xl);
+}
+.prose > * + * {
+  margin-top: var(--space-lg);
+}
+.prose p {
+  margin: 0;
+}
+.prose em {
+  font-style: italic;
+  color: var(--color-amber);
+}
+.prose strong,
+.prose b {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+.prose h2 {
+  font-size: var(--text-2xl);
+  margin-top: var(--space-2xl);
+}
+.prose h2::before {
+  content: "## ";
+  color: var(--color-accent-dim);
+}
+.prose h3 {
+  font-size: var(--text-xl);
+  margin-top: var(--space-xl);
+}
+.prose h3::before {
+  content: "### ";
+  color: var(--color-accent-dim);
+}
+.prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose a:hover {
+  color: var(--color-ink);
+}
+.prose ul {
+  list-style: none;
+  padding-left: 0;
+}
+.prose ul > li {
+  position: relative;
+  padding-left: 1.4rem;
+}
+.prose ul > li::before {
+  content: "-";
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+}
+.prose ol {
+  list-style: decimal;
+  padding-left: 1.6rem;
+}
+.prose ol > li::marker {
+  color: var(--color-accent-dim);
+}
+.prose li + li {
+  margin-top: var(--space-xs);
+}
+.prose blockquote {
+  margin: 0;
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--color-amber);
+  background: var(--color-paper-2);
+  color: var(--color-ink-2);
+}
+.prose blockquote p {
+  margin: 0;
+}
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--color-rule);
+}
+.prose img {
+  border-radius: var(--radius-md);
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+.prose th,
+.prose td {
+  text-align: left;
+  padding: var(--space-xs) var(--space-sm);
+  border-bottom: 1px solid var(--color-rule);
+}
+.prose th {
+  color: var(--color-ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: var(--text-xs);
+}
+
+/* inline code (no language class) */
+.prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--color-code-inline-bg);
+  color: var(--color-accent);
+  padding: 0.1rem 0.36rem;
+  border-radius: var(--radius-sm);
+}
+
+/* ── gatsby-remark-prismjs / prism-tomorrow overrides ──
+   Real posts ship `.gatsby-highlight > pre[class*="language-"] > code`.
+   Higher specificity + later import means these win over prism-tomorrow. */
+.prose .gatsby-highlight {
+  position: relative;
+  margin: 0;
+  max-width: 100%;
+}
+.prose .gatsby-highlight[data-language]::before {
+  content: "# " attr(data-language);
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-ink-3);
+  margin-bottom: var(--space-2xs);
+}
+.prose .gatsby-highlight pre[class*="language-"] {
+  margin: 0;
+  background: var(--color-code-bg);
+  color: var(--color-ink);
+  padding: var(--space-md) var(--space-ml);
+  border-left: 2px solid var(--color-accent);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  overflow: auto;
+  max-width: 100%;
+  font-size: 0.84rem;
+  line-height: 1.7;
+}
+.prose .gatsby-highlight pre[class*="language-"] > code {
+  font-family: var(--font-mono);
+  font-size: inherit;
+  background: none;
+  color: inherit;
+  padding: 0;
+  white-space: pre;
+}
+.gatsby-highlight-code-line {
+  display: block;
+  margin-right: calc(-1 * var(--space-ml));
+  margin-left: calc(-1 * var(--space-ml));
+  padding-right: var(--space-ml);
+  padding-left: calc(var(--space-ml) - 2px);
+  border-left: 2px solid var(--color-amber);
+  background: var(--color-paper-2);
+}
+
+/* ── Prev / next ── */
+.article__nextprev {
+  max-width: var(--measure);
+  margin: var(--space-4xl) auto 0;
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-rule);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+.np {
+  max-width: 18rem;
+}
+.np__label {
+  font-size: var(--text-xs);
+  color: var(--color-ink-3);
+}
+.np__title {
+  display: block;
+  color: var(--color-ink);
+  margin-top: var(--space-2xs);
+}
+.np:hover .np__title {
+  color: var(--color-accent);
+}
+.np--next {
+  text-align: right;
+  margin-left: auto;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   Status-bar footer
+   ────────────────────────────────────────────────────────────────── */
+.statusbar {
+  position: sticky;
+  bottom: 0;
+  border-top: 1px solid var(--color-rule);
+  background: oklch(14% 0.012 200 / 0.92);
+  backdrop-filter: blur(8px);
+}
+.statusbar__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  padding-block: var(--space-sm);
+  font-size: var(--text-xs);
+  color: var(--color-ink-3);
+}
+.statusbar__row .seg b {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+.statusbar__row nav {
+  display: flex;
+  gap: var(--space-md);
+}
+.statusbar__row nav a:hover {
+  color: var(--color-accent);
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   Motion + responsive
+   ────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: rise var(--dur) var(--ease-out) forwards;
+  }
+  @keyframes rise {
+    to {
+      opacity: 1;
+      transform: none;
     }
+  }
+}
+
+@media (max-width: 640px) {
+  .listing__head {
+    display: none;
+  }
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2xs);
+  }
+  .row__ext {
+    display: none;
+  }
+  .row__date {
+    order: -1;
+  }
+  .article__nextprev {
+    flex-direction: column;
+  }
+  .np--next {
+    text-align: left;
+    margin-left: 0;
+  }
 }

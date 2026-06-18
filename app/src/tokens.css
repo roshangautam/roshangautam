@@ -1,0 +1,66 @@
+/* tokens.css — Terminal design system, portable token export.
+ * Reveries of a software engineer. All colour in OKLCH. See design.md.
+ * style.css imports this file and references every token by name. */
+
+:root {
+  /* ── Paper (dark, low-chroma teal) ───────────────────────────── */
+  --color-paper: oklch(17% 0.012 200);
+  --color-paper-2: oklch(21% 0.014 200);
+  --color-paper-3: oklch(25% 0.016 200);
+
+  /* ── Ink ─────────────────────────────────────────────────────── */
+  --color-ink: oklch(90% 0.02 160);
+  --color-ink-2: oklch(72% 0.025 165);
+  --color-ink-3: oklch(58% 0.025 170);
+
+  /* ── Accent (phosphor green) + amber secondary ───────────────── */
+  --color-accent: oklch(86% 0.19 150);
+  --color-accent-dim: oklch(70% 0.14 152);
+  --color-amber: oklch(83% 0.13 75);
+
+  /* ── Lines + code surfaces ───────────────────────────────────── */
+  --color-rule: oklch(90% 0.02 160 / 0.12);
+  --color-code-bg: oklch(13% 0.012 200);
+  --color-code-inline-bg: oklch(86% 0.19 150 / 0.10);
+  --color-selection: oklch(86% 0.19 150 / 0.22);
+
+  /* ── Type ────────────────────────────────────────────────────── */
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", "Menlo", "Consolas",
+    monospace;
+
+  --text-xs: 0.76rem;
+  --text-sm: 0.86rem;
+  --text-base: 0.98rem;
+  --text-lg: 1.18rem;
+  --text-xl: 1.5rem;
+  --text-2xl: clamp(1.5rem, 4.2vw, 2.1rem);
+  --text-display: clamp(1.9rem, 6vw, 3rem);
+  --text-display-l: clamp(2rem, 6.5vw, 3.6rem); /* hero name */
+
+  --measure: 44rem; /* article reading width */
+  --wrap: 64rem; /* home shell width */
+  --wrap-article: 56rem; /* article shell width */
+
+  /* ── Spacing (4pt scale) ─────────────────────────────────────── */
+  --space-2xs: 0.25rem; /* 4 */
+  --space-xs: 0.5rem; /* 8 */
+  --space-sm: 0.75rem; /* 12 */
+  --space-md: 1rem; /* 16 */
+  --space-ml: 1.25rem; /* 20 */
+  --space-lg: 1.5rem; /* 24 */
+  --space-xl: 2rem; /* 32 */
+  --space-2xl: 2.5rem; /* 40 */
+  --space-3xl: 3rem; /* 48 */
+  --space-4xl: 4rem; /* 64 */
+  --space-5xl: 6rem; /* 96 */
+
+  /* ── Motion ──────────────────────────────────────────────────── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.5, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur: 380ms;
+
+  /* ── Radius ──────────────────────────────────────────────────── */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+}
