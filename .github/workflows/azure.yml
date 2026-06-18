@@ -16,7 +16,7 @@ jobs:
     environment:
       name: azure
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v6
         with:
           node-version: 18
