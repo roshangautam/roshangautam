@@ -32,7 +32,6 @@ body {
     transparent 1px
   );
   background-size: 22px 22px;
-  background-attachment: fixed;
 }
 
 /* dot grid faintly, without washing out text */

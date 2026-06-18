@@ -11,7 +11,7 @@ const BlogPostTemplate = ({ data, location }) => {
   const slug = post.fields?.slug || `/`
   const filename = slug.replace(/\//g, ``) || `post`
   const description = post.frontmatter.description
-  const words = post.wordCount?.words
+  const words = post.wordCount?.words ?? 0
   const status = (
     <>
       <b>{filename}.md</b> · {words} words · utf-8

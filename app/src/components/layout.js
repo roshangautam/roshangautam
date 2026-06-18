@@ -11,7 +11,7 @@ const Layout = ({ location, title, children, status }) => {
     <div className="t-shell" data-is-root-path={isRootPath}>
       <header className="tnav">
         <div className="wrap tnav__row">
-          <Link to="/" className="tnav__prompt" aria-label={title}>
+          <Link to="/" className="tnav__prompt">
             <b>roshangautam</b>@blog<span className="dim">:</span>
             {cwd}$
           </Link>
