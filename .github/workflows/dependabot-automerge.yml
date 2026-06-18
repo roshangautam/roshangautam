@@ -1,0 +1,43 @@
+name: Dependabot auto-merge
+
+on:
+  schedule:
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge-safe-dependabot-prs:
+    runs-on: ubuntu-latest
+    if: github.repository == 'roshangautam/roshangautam'
+    steps:
+      - name: Enable auto-merge for safe dependency PRs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr list \
+            --repo "$GITHUB_REPOSITORY" \
+            --state open \
+            --limit 100 \
+            --json number,labels,mergeable,mergeStateStatus \
+            --search 'author:app/dependabot label:dependencies' \
+            > /tmp/dependabot-prs.json
+
+          jq -r '
+            .[]
+            | select(.mergeable == "MERGEABLE")
+            | select((.labels | map(.name) | index("github_actions")) | not)
+            | .number
+          ' /tmp/dependabot-prs.json \
+          | while IFS= read -r pr_number; do
+              [ -n "$pr_number" ] || continue
+              echo "Enabling auto-merge for PR #$pr_number"
+              gh pr merge "$pr_number" \
+                --repo "$GITHUB_REPOSITORY" \
+                --auto \
+                --squash \
+                --delete-branch
+            done

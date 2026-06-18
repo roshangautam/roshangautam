@@ -6,10 +6,11 @@ env:
 on:
   workflow_dispatch:
   pull_request:
-    types: 
+    types:
       - opened
       - edited
       - reopened
+      - synchronize
     branches:
       - main
 
@@ -19,7 +20,7 @@ jobs:
     name: Build RoshanGautam.com
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v3
         with:
           node-version: 18
       - run: npm i -g @azure/static-web-apps-cli
