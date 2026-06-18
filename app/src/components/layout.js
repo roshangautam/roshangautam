@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Link } from "gatsby"
 
-const Layout = ({ location, title, children, status }) => {
+const Layout = ({ location, children, status }) => {
   const rootPath = `${__PATH_PREFIX__}/`
   const isRootPath = location.pathname === rootPath
   const cwd = isRootPath ? `~` : `~/posts`
@@ -17,7 +17,11 @@ const Layout = ({ location, title, children, status }) => {
           </Link>
           <nav className="tnav__links" aria-label="Primary">
             <Link to="/">posts</Link>
-            <Link to="/#about">about</Link>
+            {isRootPath ? (
+                <a href="#about">about</a>
+              ) : (
+                <Link to="/#about">about</Link>
+              )}
             <a href="/rss.xml">rss</a>
             <a
               href="https://github.com/roshangautam"
