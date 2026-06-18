@@ -4,7 +4,6 @@ env:
   skip_deploy_on_missing_secrets: true
   
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
@@ -22,4 +21,6 @@ jobs:
           node-version: 18
       - run: npm i -g @azure/static-web-apps-cli
       - run: swa build      
-      - run: swa deploy -d ${{ secrets.DEPLOYMENT_TOKEN }} --api-language node --api-version 18
+      - run: swa deploy --env production --api-language node --api-version 18
+        env:
+          SWA_CLI_DEPLOYMENT_TOKEN: ${{ secrets.DEPLOYMENT_TOKEN }}
