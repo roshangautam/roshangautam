@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v3
@@ -19,5 +21,5 @@ jobs:
       - uses: enriikke/gatsby-gh-pages-action@v2
         with:
           working-dir: app
-          access-token: ${{ secrets.ACCESS_TOKEN }}
+          access-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-branch: gh-pages
