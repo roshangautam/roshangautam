@@ -17,11 +17,7 @@ const Layout = ({ location, children, status }) => {
           </Link>
           <nav className="tnav__links" aria-label="Primary">
             <Link to="/">posts</Link>
-            {isRootPath ? (
-                <a href="#about">about</a>
-              ) : (
-                <Link to="/#about">about</Link>
-              )}
+            <Link to="/about">about</Link>
             <a href="/rss.xml">rss</a>
             <a
               href="https://github.com/roshangautam"
