@@ -4,7 +4,11 @@ import { Link } from "gatsby"
 const Layout = ({ location, children, status }) => {
   const rootPath = `${__PATH_PREFIX__}/`
   const isRootPath = location.pathname === rootPath
-  const cwd = isRootPath ? `~` : `~/posts`
+  const cwd = isRootPath
+    ? `~`
+    : location.pathname.startsWith(`${__PATH_PREFIX__}/about`)
+    ? `~/about`
+    : `~/posts`
   const year = new Date().getFullYear()
 
   return (
