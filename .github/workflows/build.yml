@@ -19,7 +19,7 @@ jobs:
     name: Build RoshanGautam.com
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v6
         with:
           node-version: 18
       - run: npm i -g @azure/static-web-apps-cli
