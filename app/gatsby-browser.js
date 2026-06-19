@@ -24,16 +24,14 @@ import { ApplicationInsights } from "@microsoft/applicationinsights-web"
 // resource is workspace-based (LogAnalytics ingestion), so the SDK must post to
 // the regional IngestionEndpoint carried by the connection string. A v1 snippet
 // using only the instrumentation key posts to the legacy global endpoint and is
-// rejected with "Invalid workspace". The instrumentation key is write-only and
-// public by design (it ships to every browser), so embedding it here is fine.
-const AI_CONNECTION_STRING =
-  process.env.GATSBY_APPINSIGHTS_CONNECTION_STRING ||
-  "InstrumentationKey=35cc108f-453e-4683-86c0-0565439548d6;IngestionEndpoint=https://westus2-2.in.applicationinsights.azure.com/;LiveEndpoint=https://westus2.livediagnostics.monitor.azure.com/;ApplicationId=8387c2dc-1f49-4bfd-a951-b8dae9d91445"
+// rejected with "Invalid workspace".
+const AI_CONNECTION_STRING = process.env.GATSBY_APPINSIGHTS_CONNECTION_STRING
 
 let appInsights
 
 export const onClientEntry = () => {
   if (process.env.NODE_ENV !== "production") return
+  if (!AI_CONNECTION_STRING) return
   appInsights = new ApplicationInsights({
     config: {
       connectionString: AI_CONNECTION_STRING,
