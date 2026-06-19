@@ -36,6 +36,7 @@ export const onClientEntry = () => {
   appInsights = new ApplicationInsights({
     config: {
       connectionString: AI_CONNECTION_STRING,
+      enableAutoRouteTracking: false,
     },
   })
   appInsights.loadAppInsights()
