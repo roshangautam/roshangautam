@@ -27,24 +27,25 @@ import { ApplicationInsights } from "@microsoft/applicationinsights-web"
 // rejected with "Invalid workspace". The instrumentation key is write-only and
 // public by design (it ships to every browser), so embedding it here is fine.
 const AI_CONNECTION_STRING =
-    "InstrumentationKey=35cc108f-453e-4683-86c0-0565439548d6;IngestionEndpoint=https://westus2-2.in.applicationinsights.azure.com/;LiveEndpoint=https://westus2.livediagnostics.monitor.azure.com/;ApplicationId=8387c2dc-1f49-4bfd-a951-b8dae9d91445"
+  process.env.GATSBY_APPINSIGHTS_CONNECTION_STRING ||
+  "InstrumentationKey=35cc108f-453e-4683-86c0-0565439548d6;IngestionEndpoint=https://westus2-2.in.applicationinsights.azure.com/;LiveEndpoint=https://westus2.livediagnostics.monitor.azure.com/;ApplicationId=8387c2dc-1f49-4bfd-a951-b8dae9d91445"
 
 let appInsights
 
 export const onClientEntry = () => {
-    appInsights = new ApplicationInsights({
-        config: {
-            connectionString: AI_CONNECTION_STRING,
-        },
-    })
-    appInsights.loadAppInsights()
-    appInsights.trackPageView()
+  appInsights = new ApplicationInsights({
+    config: {
+      connectionString: AI_CONNECTION_STRING,
+    },
+  })
+  appInsights.loadAppInsights()
+  appInsights.trackPageView()
 }
 
 // Track client-side route changes. The initial pageview is tracked above on
 // load, so skip the first render (prevLocation is null) to avoid double-counting.
 export const onRouteUpdate = ({ prevLocation }) => {
-    if (prevLocation && appInsights) {
-        appInsights.trackPageView()
-    }
+  if (prevLocation && appInsights) {
+    appInsights.trackPageView()
+  }
 }
