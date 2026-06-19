@@ -14,3 +14,38 @@ import "prismjs/themes/prism-tomorrow.css"
 
 // custom CSS styles
 import "./src/style.css"
+
+import { ApplicationInsights } from "@microsoft/applicationinsights-web"
+
+// Azure Application Insights browser telemetry. These lifecycle exports only run
+// when defined in gatsby-browser.js — Gatsby ignores them from page components.
+//
+// The connection string (not a bare instrumentation key) is required: this
+// resource is workspace-based (LogAnalytics ingestion), so the SDK must post to
+// the regional IngestionEndpoint carried by the connection string. A v1 snippet
+// using only the instrumentation key posts to the legacy global endpoint and is
+// rejected with "Invalid workspace".
+const AI_CONNECTION_STRING = process.env.GATSBY_APPINSIGHTS_CONNECTION_STRING
+
+let appInsights
+
+export const onClientEntry = () => {
+  if (process.env.NODE_ENV !== "production") return
+  if (!AI_CONNECTION_STRING) return
+  appInsights = new ApplicationInsights({
+    config: {
+      connectionString: AI_CONNECTION_STRING,
+      enableAutoRouteTracking: false,
+    },
+  })
+  appInsights.loadAppInsights()
+  appInsights.trackPageView()
+}
+
+// Track client-side route changes. The initial pageview is tracked above on
+// load, so skip the first render (prevLocation is null) to avoid double-counting.
+export const onRouteUpdate = ({ prevLocation }) => {
+  if (prevLocation && appInsights) {
+    appInsights.trackPageView()
+  }
+}
