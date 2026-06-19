@@ -3,6 +3,10 @@ import * as React from "react"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 
+// About data is fully static; import it at build time so the page renders on GitHub Pages too.
+// Azure SWA served it via /api/about, which GitHub Pages can't run.
+import about from "../../../api/about/data.json"
+
 const SITE_TITLE = `Reveries of a software engineer`
 const SECTION_COUNT = 7
 
@@ -15,69 +19,11 @@ const contactHref = (key, value) => {
 }
 
 const AboutPage = ({ location }) => {
-  const [about, setAbout] = React.useState(null)
-  const [error, setError] = React.useState(false)
-  const sectionCount = about && !error ? SECTION_COUNT : 0
   const status = (
     <>
-      <b>~/about</b> · {sectionCount} sections · utf-8
+      <b>~/about</b> · {SECTION_COUNT} sections · utf-8
     </>
   )
-
-  React.useEffect(() => {
-    let mounted = true
-
-    fetch("/api/about")
-      .then(res => {
-        if (!res.ok) {
-          throw new Error("Could not load about data")
-        }
-
-        return res.json()
-      })
-      .then(data => {
-        if (mounted) {
-          setAbout(data)
-        }
-      })
-      .catch(() => {
-        if (mounted) {
-          setError(true)
-        }
-      })
-
-    return () => {
-      mounted = false
-    }
-  }, [])
-
-  if (error) {
-    return (
-      <Layout location={location} title={SITE_TITLE} status={status}>
-        <Seo title="About" />
-        <section className="wrap hero">
-          <p className="line">
-            <span className="pr">❯</span> cat about.json
-          </p>
-          <p className="line dim">cat: about.json: could not load</p>
-        </section>
-      </Layout>
-    )
-  }
-
-  if (!about) {
-    return (
-      <Layout location={location} title={SITE_TITLE} status={status}>
-        <Seo title="About" />
-        <section className="wrap hero">
-          <p className="line about-loading">
-            <span className="pr">❯</span> cat about.json
-            <span className="blink">_</span>
-          </p>
-        </section>
-      </Layout>
-    )
-  }
 
   const experience = about.experience || []
   const projects = about.projects || []
