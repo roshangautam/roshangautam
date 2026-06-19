@@ -33,6 +33,7 @@ const AI_CONNECTION_STRING =
 let appInsights
 
 export const onClientEntry = () => {
+  if (process.env.NODE_ENV !== "production") return
   appInsights = new ApplicationInsights({
     config: {
       connectionString: AI_CONNECTION_STRING,
