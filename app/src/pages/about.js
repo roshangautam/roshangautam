@@ -3,8 +3,8 @@ import * as React from "react"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 
-// ponytail: about data is fully static; import it at build time so the page renders
-// on GitHub Pages too. Azure SWA served it via /api/about, which Pages can't run.
+// About data is fully static; import it at build time so the page renders on GitHub Pages too.
+// Azure SWA served it via /api/about, which GitHub Pages can't run.
 import about from "../../../api/about/data.json"
 
 const SITE_TITLE = `Reveries of a software engineer`
