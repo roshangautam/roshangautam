@@ -49,7 +49,7 @@
     "ansi-regex": ">=6.2.2",
     "nth-check": ">=2.0.1",
     "ws": ">=8.21.0",
-    "browserslist": ">=4.16.5",
+    "browserslist": ">=4.28.5",
     "minimatch": "^5.1.8"
   },
   "homepage": "https://github.com/gatsbyjs/gatsby-starter-blog#readme",
