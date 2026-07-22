@@ -38,7 +38,7 @@
     "babel-eslint": ">=10.0.0",
     "gh-pages": "^6.3.0",
     "node-fetch": ">=2.6.7",
-    "npm-check": "4.1.4",
+    "npm-check": "6.0.1",
     "postcss": "8.5.10",
     "prettier": "3.9.4",
     "sanitize-html": "2.17.5",
