@@ -50,7 +50,7 @@
     "nth-check": ">=3.0.1",
     "ws": ">=8.21.0",
     "browserslist": ">=4.28.7",
-    "minimatch": "^10.2.5"
+    "minimatch": "^10.2.6"
   },
   "homepage": "https://github.com/gatsbyjs/gatsby-starter-blog#readme",
   "keywords": [
