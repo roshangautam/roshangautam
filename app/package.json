@@ -40,7 +40,7 @@
     "node-fetch": ">=2.6.7",
     "npm-check": "6.0.1",
     "postcss": "8.5.24",
-    "prettier": "3.9.4",
+    "prettier": "3.9.6",
     "sanitize-html": "2.17.5",
     "trim": ">=0.0.3",
     "trim-newlines": ">=3.0.1",
