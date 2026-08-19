@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@fontsource/jetbrains-mono": "^5.1.1",
-    "@microsoft/applicationinsights-web": "^3.4.2",
+    "@microsoft/applicationinsights-web": "^3.4.3",
     "gatsby": "^5.16.1",
     "gatsby-plugin-feed": "5.16.0",
     "gatsby-plugin-gatsby-cloud": "5.14.0",
