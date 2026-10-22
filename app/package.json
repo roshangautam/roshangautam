@@ -41,7 +41,7 @@
     "npm-check": "6.0.1",
     "postcss": "8.5.30",
     "prettier": "3.9.10",
-    "sanitize-html": "2.18.0",
+    "sanitize-html": "2.18.1",
     "trim": ">=0.0.3",
     "trim-newlines": ">=3.0.1",
     "typescript": "7.0.2",
